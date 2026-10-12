@@ -25,9 +25,12 @@
                 <p class="text-xs text-amber-300">Standalone Management Dashboard</p>
             </div>
         </div>
-        <a href="index.html" class="text-xs text-slate-300 hover:text-white underline flex items-center gap-1">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i> Return to Public Site
-        </a>
+        <div class="flex items-center gap-4">
+            <button onclick="handleLogout()" class="text-xs text-slate-300 hover:text-white underline">Lock Session</button>
+            <a href="index.html" class="text-xs text-slate-300 hover:text-white underline flex items-center gap-1">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Return to Public Site
+            </a>
+        </div>
     </header>
 
     <!-- Main Container -->
@@ -132,16 +135,35 @@
 
     <!-- Admin JavaScript Logic -->
     <script>
+        const VALID_PASSCODES = ['good1234', 'admin123', 'love4paws'];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('love4paws_admin_auth') === 'true') {
+                document.getElementById('admin-login-view').classList.add('hidden');
+                document.getElementById('admin-dashboard-view').classList.remove('hidden');
+                loadAdminData();
+            }
+            lucide.createIcons();
+        });
+
         function handleAdminLogin(e) {
             e.preventDefault();
             const pass = document.getElementById('admin-password').value;
-            if (pass === 'good1234' || pass === 'admin123' || pass === 'love4paws') {
+            if (VALID_PASSCODES.includes(pass)) {
+                sessionStorage.setItem('love4paws_admin_auth', 'true');
                 document.getElementById('admin-login-view').classList.add('hidden');
                 document.getElementById('admin-dashboard-view').classList.remove('hidden');
                 loadAdminData();
             } else {
                 alert('Incorrect passcode.');
             }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('love4paws_admin_auth');
+            document.getElementById('admin-dashboard-view').classList.add('hidden');
+            document.getElementById('admin-login-view').classList.remove('hidden');
+            document.getElementById('admin-password').value = '';
         }
 
         function switchTab(tab) {
@@ -334,10 +356,6 @@
             resetDogForm();
             loadAdminDogs();
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-        });
     </script>
 </body>
 </html>
