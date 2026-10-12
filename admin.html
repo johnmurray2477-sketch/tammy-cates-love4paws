@@ -89,17 +89,10 @@
                         <input type="hidden" id="edit-dog-id">
                         <input type="text" id="dog-name" placeholder="Dog Name" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
                         <input type="text" id="dog-breed" placeholder="Breed" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
-                        <select id="dog-age" class="px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
-                            <option value="Puppy">Puppy</option>
-                            <option value="Young">Young</option>
-                            <option value="Adult">Adult</option>
-                            <option value="Senior">Senior</option>
-                        </select>
-                        <select id="dog-size" class="px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
-                            <option value="Small">Small</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Large">Large</option>
-                        </select>
+                        
+                        <!-- Freeform Age Input -->
+                        <input type="text" id="dog-age" placeholder="Age (e.g. 2 Years, 6 Months)" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
+                        
                         <select id="dog-gender" class="px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -133,7 +126,7 @@
         &copy; 2026 Tammy Cates Love4paws Admin Portal. Secure Management Console.
     </footer>
 
-    <!-- Admin JavaScript Logic (SAFE: NO HARCODED PASSWORDS) -->
+    <!-- Admin JavaScript Logic -->
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('love4paws_admin_auth') === 'true') {
@@ -148,7 +141,6 @@
             e.preventDefault();
             const pass = document.getElementById('admin-password').value;
             
-            // Validates login input without embedding any secret password in the public JavaScript code
             if (pass && pass.trim().length > 0) {
                 sessionStorage.setItem('love4paws_admin_auth', 'true');
                 document.getElementById('admin-login-view').classList.add('hidden');
@@ -247,7 +239,7 @@
                         <img src="${dog.image}" class="w-10 h-10 rounded-lg object-cover">
                         <div>
                             <span class="font-bold text-slate-900">${dog.name}</span>
-                            <span class="block text-xs text-slate-500">${dog.breed} ${isFeatured ? '• <strong class="text-amber-600">Featured Hero Dog</strong>' : ''}</span>
+                            <span class="block text-xs text-slate-500">${dog.breed} • ${dog.ageText || dog.ageCategory || dog.age || ''} ${isFeatured ? '• <strong class="text-amber-600">Featured Hero Dog</strong>' : ''}</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -276,8 +268,7 @@
             document.getElementById('edit-dog-id').value = dog.id;
             document.getElementById('dog-name').value = dog.name || '';
             document.getElementById('dog-breed').value = dog.breed || '';
-            document.getElementById('dog-age').value = dog.ageCategory || dog.age || 'Puppy';
-            document.getElementById('dog-size').value = dog.size || 'Small';
+            document.getElementById('dog-age').value = dog.ageText || dog.ageCategory || dog.age || '';
             document.getElementById('dog-gender').value = dog.gender || 'Male';
             document.getElementById('dog-image-url').value = dog.image || '';
             document.getElementById('dog-bio').value = dog.bio || '';
@@ -311,8 +302,7 @@
             const editId = document.getElementById('edit-dog-id').value;
             const name = document.getElementById('dog-name').value;
             const breed = document.getElementById('dog-breed').value;
-            const age = document.getElementById('dog-age').value;
-            const size = document.getElementById('dog-size').value;
+            const ageInput = document.getElementById('dog-age').value;
             const gender = document.getElementById('dog-gender').value;
             const bio = document.getElementById('dog-bio').value;
             const imageUrl = document.getElementById('dog-image-url').value.trim();
@@ -324,9 +314,9 @@
                     if (String(d.id) === String(editId)) {
                         d.name = name;
                         d.breed = breed;
-                        d.ageCategory = age;
-                        d.ageText = age + " Old";
-                        d.size = size;
+                        d.age = ageInput;
+                        d.ageCategory = ageInput;
+                        d.ageText = ageInput;
                         d.gender = gender;
                         d.bio = bio;
                         if (imageUrl) d.image = imageUrl;
@@ -340,16 +330,16 @@
                     id: newId,
                     name,
                     breed,
-                    ageCategory: age,
-                    ageText: age + " Old",
-                    size,
+                    age: ageInput,
+                    ageCategory: ageInput,
+                    ageText: ageInput,
                     gender,
                     image: imageUrl,
                     bio,
                     traits: ["Friendly", "Loving"],
                     status: 'available'
                 });
-                alert('New dog added successfully with ImgBB image link!');
+                alert('New dog added successfully!');
             }
 
             localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
