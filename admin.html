@@ -74,11 +74,16 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Dogs Inventory & Image Controls -->
+            <!-- Tab 2: Dogs Inventory & Image Controls (Add / Edit) -->
             <div id="tab-content-dogs" class="hidden space-y-6">
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="font-heading font-bold text-lg text-slate-900">Add New Adoptable Dog & Images</h3>
-                    <form onsubmit="addNewDogRecord(event)" class="grid sm:grid-cols-3 gap-3">
+                    <div class="flex items-center justify-between">
+                        <h3 id="form-title" class="font-heading font-bold text-lg text-slate-900">Add New Adoptable Dog & Images</h3>
+                        <button id="cancel-edit-btn" onclick="resetDogForm()" class="hidden text-xs text-rose-600 hover:underline font-bold">Cancel Edit</button>
+                    </div>
+
+                    <form onsubmit="handleSaveDogRecord(event)" class="grid sm:grid-cols-3 gap-3">
+                        <input type="hidden" id="edit-dog-id">
                         <input type="text" id="dog-name" placeholder="Dog Name" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
                         <input type="text" id="dog-breed" placeholder="Breed" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
                         <select id="dog-age" class="px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
@@ -113,7 +118,7 @@
                         </div>
 
                         <textarea id="dog-bio" placeholder="Short Bio / Story..." rows="2" class="sm:col-span-3 px-3 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
-                        <button type="submit" class="sm:col-span-3 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-sm transition-all shadow-md">Add Dog to Catalog</button>
+                        <button type="submit" id="form-submit-btn" class="sm:col-span-3 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-sm transition-all shadow-md">Add Dog to Catalog</button>
                     </form>
                 </div>
 
@@ -213,7 +218,16 @@
         }
 
         function loadAdminDogs() {
-            const dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
+            let dogs = JSON.parse(localStorage.getItem('love4paws_dogs'));
+            if (!dogs || dogs.length === 0) {
+                // Default fallback dogs if empty
+                dogs = [
+                    { id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", ageCategory: "Young", size: "Large", gender: "Male", image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80", bio: "Buster is a joyful Golden mix.", status: "available" },
+                    { id: "dog-2", name: "Luna", breed: "Beagle Mix", ageCategory: "Puppy", size: "Medium", gender: "Female", image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80", bio: "Luna has adorable floppy ears.", status: "available" }
+                ];
+                localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
+            }
+
             const container = document.getElementById('admin-dogs-container');
             container.innerHTML = '';
 
@@ -229,24 +243,58 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="deleteDogRecord(${dog.id})" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-100 text-rose-800 hover:bg-rose-200">Delete</button>
+                        <button onclick="editDogRecord('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-100 text-amber-800 hover:bg-amber-200">Edit</button>
+                        <button onclick="deleteDogRecord('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-100 text-rose-800 hover:bg-rose-200">Delete</button>
                     </div>
                 `;
                 container.appendChild(item);
             });
         }
 
+        function editDogRecord(id) {
+            const dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
+            const dog = dogs.find(d => String(d.id) === String(id));
+            if (!dog) {
+                alert("Dog record not found.");
+                return;
+            }
+
+            document.getElementById('edit-dog-id').value = dog.id;
+            document.getElementById('dog-name').value = dog.name || '';
+            document.getElementById('dog-breed').value = dog.breed || '';
+            document.getElementById('dog-age').value = dog.ageCategory || dog.age || 'Puppy';
+            document.getElementById('dog-size').value = dog.size || 'Small';
+            document.getElementById('dog-gender').value = dog.gender || 'Male';
+            document.getElementById('dog-image-url').value = dog.image && !dog.image.startsWith('data:') ? dog.image : '';
+            document.getElementById('dog-bio').value = dog.bio || '';
+
+            document.getElementById('form-title').innerText = `Edit Dog: ${dog.name}`;
+            document.getElementById('form-submit-btn').innerText = 'Save Changes';
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetDogForm() {
+            document.getElementById('edit-dog-id').value = '';
+            document.querySelector('form').reset();
+            document.getElementById('form-title').innerText = 'Add New Adoptable Dog & Images';
+            document.getElementById('form-submit-btn').innerText = 'Add Dog to Catalog';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        }
+
         function deleteDogRecord(id) {
             if (confirm("Are you sure you want to delete this dog listing?")) {
                 let dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
-                dogs = dogs.filter(d => d.id != id);
+                dogs = dogs.filter(d => String(d.id) !== String(id));
                 localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
                 loadAdminDogs();
             }
         }
 
-        function addNewDogRecord(e) {
+        function handleSaveDogRecord(e) {
             e.preventDefault();
+            const editId = document.getElementById('edit-dog-id').value;
             const name = document.getElementById('dog-name').value;
             const breed = document.getElementById('dog-breed').value;
             const age = document.getElementById('dog-age').value;
@@ -257,39 +305,63 @@
             const fileInput = document.getElementById('dog-file-input');
             const urlInput = document.getElementById('dog-image-url').value.trim();
 
-            let imageSrc = urlInput || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80";
+            let dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
 
-            const finalizeDogCreation = (finalImage) => {
-                let dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
-                dogs.unshift({
-                    id: Date.now(),
-                    name,
-                    breed,
-                    ageCategory: age,
-                    ageText: age + " Old",
-                    size,
-                    gender,
-                    image: finalImage,
-                    bio,
-                    traits: ["Friendly", "Loving"],
-                    status: 'available'
-                });
+            const finalizeSave = (finalImage) => {
+                if (editId) {
+                    // Update existing dog
+                    dogs = dogs.map(d => {
+                        if (String(d.id) === String(editId)) {
+                            d.name = name;
+                            d.breed = breed;
+                            d.ageCategory = age;
+                            d.ageText = age + " Old";
+                            d.size = size;
+                            d.gender = gender;
+                            d.bio = bio;
+                            if (finalImage) d.image = finalImage;
+                        }
+                        return d;
+                    });
+                    alert('Dog listing updated successfully!');
+                } else {
+                    // Add new dog
+                    let imageSrc = finalImage || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80";
+                    dogs.unshift({
+                        id: "dog-" + Date.now(),
+                        name,
+                        breed,
+                        ageCategory: age,
+                        ageText: age + " Old",
+                        size,
+                        gender,
+                        image: imageSrc,
+                        bio,
+                        traits: ["Friendly", "Loving"],
+                        status: 'available'
+                    });
+                    alert('New dog added successfully!');
+                }
+
                 localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
-
-                e.target.reset();
+                resetDogForm();
                 loadAdminDogs();
-                alert('New dog added successfully with image!');
             };
 
-            // If a computer file was selected, convert it via FileReader
+            // If a computer file was selected, read it as Data URL
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(uploadEvent) {
-                    finalizeDogCreation(uploadEvent.target.result);
+                    finalizeSave(uploadEvent.target.result);
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
-                finalizeDogCreation(imageSrc);
+                let existingImage = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80";
+                if (editId) {
+                    let found = dogs.find(d => String(d.id) === String(editId));
+                    if (found) existingImage = found.image;
+                }
+                finalizeSave(urlInput || existingImage);
             }
         }
 
