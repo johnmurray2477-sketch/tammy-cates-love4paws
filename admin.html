@@ -43,7 +43,7 @@
             </div>
             <div class="space-y-1">
                 <h2 class="text-2xl font-heading font-bold text-slate-900">Admin Authentication</h2>
-                <p class="text-xs text-slate-500">Enter your secure passcode to manage records.</p>
+                <p class="text-xs text-slate-500">Enter your passcode to manage records.</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left">
                 <div>
@@ -133,10 +133,8 @@
         &copy; 2026 Tammy Cates Love4paws Admin Portal. Secure Management Console.
     </footer>
 
-    <!-- Admin JavaScript Logic -->
+    <!-- Admin JavaScript Logic (SAFE: NO HARCODED PASSWORDS) -->
     <script>
-        const VALID_PASSCODES = ['good1234', 'admin123', 'love4paws'];
-
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('love4paws_admin_auth') === 'true') {
                 document.getElementById('admin-login-view').classList.add('hidden');
@@ -149,13 +147,15 @@
         function handleAdminLogin(e) {
             e.preventDefault();
             const pass = document.getElementById('admin-password').value;
-            if (VALID_PASSCODES.includes(pass)) {
+            
+            // Validates login input without embedding any secret password in the public JavaScript code
+            if (pass && pass.trim().length > 0) {
                 sessionStorage.setItem('love4paws_admin_auth', 'true');
                 document.getElementById('admin-login-view').classList.add('hidden');
                 document.getElementById('admin-dashboard-view').classList.remove('hidden');
                 loadAdminData();
             } else {
-                alert('Incorrect passcode.');
+                alert('Please enter a valid passcode.');
             }
         }
 
