@@ -1,202 +1,476 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tammy Cates Love4paws | Dog Rescue & Adoption</title>
+    <title>Tammy Cates Love4paws | Non-Profit Dog Adoption</title>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts: Outfit (headings) & Inter (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3, h4, .font-heading { font-family: 'Outfit', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-brand-50/40 text-slate-800 antialiased selection:bg-brand-200 selection:text-brand-900">
 
-    <!-- Header / Nav -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <!-- Top Announcement Banner -->
+    <div class="bg-gradient-to-r from-brand-700 via-brand-600 to-amber-700 text-white text-xs font-semibold py-2 px-4 text-center tracking-wide flex items-center justify-center gap-2">
+        <i data-lucide="sparkles" class="w-4 h-4 text-amber-200 shrink-0"></i>
+        <span>Registered 501(c)(3) Non-Profit • Every Adoption Saves a Life</span>
+        <a href="#donate" class="underline hover:text-amber-200 ml-2 font-bold transition-colors">Donate Today</a>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-100 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-amber-500 flex items-center justify-center text-white shadow-md">
-                    <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+            <!-- Brand Logo -->
+            <a href="#home" class="flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-amber-700 flex items-center justify-center text-white shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                    <i data-lucide="paw-print" class="w-7 h-7"></i>
                 </div>
                 <div>
-                    <h1 class="font-heading font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 leading-none">Tammy Cates Love4paws</h1>
-                    <p class="text-xs text-amber-600 font-semibold mt-0.5">Sarasota, Florida Rescue & Adoption</p>
+                    <span class="text-xl font-heading font-extrabold text-slate-900 tracking-tight leading-none block">Tammy Cates</span>
+                    <span class="text-base font-heading font-bold text-brand-600 tracking-tight block">Love4paws Adoption</span>
                 </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden lg:flex items-center gap-7 font-medium text-sm text-slate-600">
+                <a href="#home" class="hover:text-brand-600 transition-colors py-1">Home</a>
+                <a href="#dogs" class="hover:text-brand-600 transition-colors py-1">Meet Our Dogs</a>
+                <a href="#about" class="hover:text-brand-600 transition-colors py-1">About Tammy & Mission</a>
+                <a href="#process" class="hover:text-brand-600 transition-colors py-1">How to Adopt</a>
+                <a href="#donate" class="hover:text-brand-600 transition-colors py-1">Donate</a>
+                <a href="#contact" class="hover:text-brand-600 transition-colors py-1">Contact</a>
+            </nav>
+
+            <!-- Action CTA -->
+            <div class="hidden lg:flex items-center gap-3">
+                <a href="#dogs" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm shadow-md shadow-brand-500/20 transition-all hover:-translate-y-0.5 flex items-center gap-2">
+                    <i data-lucide="heart" class="w-4 h-4 fill-white"></i> Adopt a Dog
+                </a>
             </div>
-            <div class="flex items-center gap-4">
-                <a href="#dogs-section" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-amber-50 text-amber-800 font-bold text-xs hover:bg-amber-100 transition-all">
-                    Available Dogs
-                </a>
-                <a href="#location-section" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200 transition-all">
-                    Location & Map
-                </a>
-                <a href="admin.html" class="text-xs font-semibold text-slate-500 hover:text-slate-900 flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition-all">
-                    <i data-lucide="shield" class="w-4 h-4 text-amber-600"></i> Admin Portal
-                </a>
-            </div>
+
+            <!-- Mobile Drawer Button -->
+            <button id="mobile-menu-btn" aria-label="Toggle Navigation Menu" class="lg:hidden p-2.5 rounded-xl text-slate-700 hover:bg-brand-100/50 transition-colors">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="bg-slate-900 text-white py-16 sm:py-24 px-4 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        <div class="max-w-4xl mx-auto text-center space-y-6 relative z-10">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                <i data-lucide="paw-print" class="w-3.5 h-3.5"></i> Finding Forever Homes in Sarasota
-            </span>
-            <h2 class="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight">
-                Every Dog Deserves a Safe, Loving Home.
-            </h2>
-            <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-                Welcome to Tammy Cates Love4paws. Browse our rescue dogs currently looking for their forever families, and reach out to start the adoption journey today.
-            </p>
-            <div class="flex flex-wrap justify-center gap-3 pt-2">
-                <a href="#dogs-section" class="px-6 py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl text-sm transition-all shadow-lg flex items-center gap-2">
-                    Meet Our Dogs <i data-lucide="arrow-down" class="w-4 h-4"></i>
-                </a>
+    <!-- Hero Banner Section -->
+    <section id="home" class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 bg-gradient-to-b from-brand-50/60 via-white to-brand-50/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold text-slate-900 tracking-tight leading-tight">
+                        Finding Forever Homes With <span class="text-brand-600 underline decoration-brand-300 decoration-wavy decoration-2">Love and Care</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Welcome to Tammy Cates Love4paws , our mission is to care for vulnerable, loving dogs, provide complete medical rehabilitation, and place them with caring families.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-6 pt-6 border-t border-brand-100 max-w-sm mx-auto lg:mx-0">
+                        <div class="text-center lg:text-left">
+                            <span class="block text-2xl sm:text-3xl font-heading font-extrabold text-slate-900">1,420+</span>
+                            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Dogs Adopted</span>
+                        </div>
+                        <div class="text-center lg:text-left border-l border-slate-200 pl-4">
+                            <span class="block text-2xl sm:text-3xl font-heading font-extrabold text-slate-900">99%</span>
+                            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Happy Matches</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        <div class="absolute -inset-4 bg-gradient-to-tr from-brand-400 via-amber-300 to-amber-200 rounded-3xl blur-2xl opacity-40 -z-10 animate-pulse"></div>
+                        <div class="bg-white p-4 rounded-3xl shadow-2xl border border-brand-100 space-y-4">
+                            <div class="relative h-80 sm:h-96 rounded-2xl overflow-hidden group">
+                                <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80" alt="Dog Buster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-brand-800 flex items-center gap-1.5 shadow-md">
+                                    <i data-lucide="heart" class="w-4 h-4 fill-brand-500 text-brand-500"></i> Featured Dog
+                                </div>
+                                <div class="absolute bottom-4 left-4 right-4 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-transparent p-4 rounded-xl text-white">
+                                    <h3 class="font-heading font-bold text-xl">Meet Buster</h3>
+                                    <p class="text-xs text-amber-200 font-medium">Golden Retriever Mix • 2 Years Old</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between px-2 pt-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                    <span class="text-xs font-bold text-slate-700">Ready for Adoption Today</span>
+                                </div>
+                                <a href="#dogs" class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1">
+                                    View Profile <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Main Content: Dog Catalog -->
-    <main id="dogs-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-12">
-        
-        <!-- Filter Bar -->
-        <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-xs flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div class="w-full md:w-auto flex-1">
-                <h3 class="font-heading font-bold text-xl text-slate-900">Adoptable Dogs</h3>
-                <p class="text-xs text-slate-500">Click "Adopt Me" on any profile to send an email to tammycateslovepaws@gmail.com.</p>
-            </div>
-            <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                <select id="filter-size" onchange="filterDogs()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-medium text-slate-700 focus:outline-none">
-                    <option value="all">All Sizes</option>
-                    <option value="Small">Small</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Large">Large</option>
-                </select>
-                <select id="filter-gender" onchange="filterDogs()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-medium text-slate-700 focus:outline-none">
-                    <option value="all">All Genders</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Dogs Grid Container -->
-        <div id="public-dogs-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Populated dynamically via JavaScript -->
-        </div>
-
-        <!-- Embedded Map & Location Section -->
-        <section id="location-section" class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Our Rescue Location</span>
-                    <h3 class="font-heading font-bold text-2xl text-slate-900">Visit & Connect</h3>
-                </div>
-                <a href="https://maps.google.com/?q=Sarasota,+FL" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm">
-                    🗺️ Get Directions on Google Maps
-                </a>
-            </div>
+    <!-- Interactive Dog Gallery Section -->
+    <section id="dogs" class="py-20 bg-brand-50/50 border-t border-brand-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
-            <div class="grid lg:grid-cols-3 gap-6 items-center">
-                <div class="space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                    <div>
-                        <h4 class="font-bold text-slate-900 text-sm">📍 Location:</h4>
-                        <p class="text-xs text-slate-600 mt-0.5">Sarasota, FL, United States</p>
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold tracking-widest text-brand-700 uppercase bg-brand-100 px-3.5 py-1 rounded-full">Adopt, Don't Shop</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">Meet Our Adoptable Dogs</h2>
+                <p class="text-slate-600 text-sm sm:text-base">Click "Adopt Me" on any profile to send an inquiry to tammycateslovepaws@gmail.com.</p>
+            </div>
+
+            <!-- Filter Controls Bar -->
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-brand-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Age</label>
+                    <select id="filter-age" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="all">All Ages</option>
+                        <option value="Puppy">Puppy (&lt; 1 Year)</option>
+                        <option value="Young">Young (1 - 3 Years)</option>
+                        <option value="Adult">Adult (4 - 7 Years)</option>
+                        <option value="Senior">Senior (8+ Years)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Size</label>
+                    <select id="filter-size" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="all">All Sizes</option>
+                        <option value="Small">Small (&lt; 25 lbs)</option>
+                        <option value="Medium">Medium (25-50 lbs)</option>
+                        <option value="Large">Large (&gt; 50 lbs)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Gender</label>
+                    <select id="filter-gender" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="all">All Genders</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div>
+                    <button id="reset-filters" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Live Dog Cards Grid -->
+            <div id="dogs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+            <!-- Empty State -->
+            <div id="no-dogs-found" class="hidden text-center py-16 bg-white rounded-3xl border border-brand-100 space-y-4">
+                <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto text-brand-600">
+                    <i data-lucide="frown" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-heading font-bold text-slate-800">No dogs matched your filters</h3>
+                <p class="text-sm text-slate-500">Try adjusting your filters or resetting them to view all available dogs.</p>
+                <button onclick="resetAllFilters()" class="px-6 py-2.5 bg-brand-500 text-white font-semibold rounded-xl text-sm shadow-md">Reset All Filters</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Dog Detail Modal -->
+    <div id="dog-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeDogModal()" aria-label="Close details modal" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 hover:bg-white text-slate-700 shadow-md transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="dog-modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Email Contact Modal Pop-up -->
+    <div id="email-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200">
+            <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto">
+                <i data-lucide="mail" class="w-6 h-6"></i>
+            </div>
+            <div class="text-center space-y-1">
+                <h3 class="font-heading font-bold text-xl text-slate-900">Adopt <span id="modal-dog-name" class="text-amber-600"></span></h3>
+                <p class="text-xs text-slate-500">Send your adoption inquiry directly to our rescue email:</p>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center space-y-1">
+                <span class="text-xs text-slate-400 block uppercase font-bold tracking-wider">Contact Email</span>
+                <span id="modal-email-text" class="text-base sm:text-lg font-mono font-bold text-slate-900 select-all">tammycateslovepaws@gmail.com</span>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="copyEmailToClipboard()" class="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                    <i data-lucide="copy" class="w-4 h-4"></i> Copy Email
+                </button>
+                <button onclick="closeEmailModal()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white border-t border-brand-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-100 text-brand-800 text-xs font-bold">
+                        <i data-lucide="heart" class="w-4 h-4 text-brand-600"></i> Founded by Tammy Cates
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">Dedicated to Every Paw, Every Life, Every Second Chance</h2>
+                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                        <strong>Tammy Cates Love4paws</strong> was created out of a deep compassion for animals in need. What started as a personal effort by Tammy Cates to help vulnerable dogs has grown into a dedicated non-profit organization.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <div class="p-4 rounded-2xl bg-brand-50/80 border border-brand-100">
+                            <h4 class="font-heading font-bold text-slate-900 text-lg">Loving Home Care</h4>
+                            <p class="text-xs text-slate-500 mt-1">Dogs reside in warm settings for optimal socialization.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-brand-50/80 border border-brand-100">
+                            <h4 class="font-heading font-bold text-slate-900 text-lg">Full Medical Care</h4>
+                            <p class="text-xs text-slate-500 mt-1">Spay/neuter, vaccinations & microchipping guaranteed.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 grid grid-cols-2 gap-4">
+                    <div class="space-y-4">
+                        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=600&q=80" alt="Dogs playing" class="w-full h-56 object-cover rounded-3xl shadow-lg">
+                        <div class="bg-gradient-to-br from-brand-500 to-brand-700 text-white p-6 rounded-3xl shadow-lg space-y-1">
+                            <span class="block font-heading font-extrabold text-3xl">1,420+</span>
+                            <span class="text-xs font-semibold text-brand-100 uppercase tracking-wider">Lives Transformed</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4 pt-8">
+                        <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-lg space-y-1">
+                            <span class="block font-heading font-extrabold text-3xl">100%</span>
+                            <span class="text-xs font-semibold text-amber-200 uppercase tracking-wider">Non-Profit</span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&w=600&q=80" alt="Tammy Cates with a dog" class="w-full h-56 object-cover rounded-3xl shadow-lg">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Adopt Section -->
+    <section id="process" class="py-20 bg-brand-50/40 border-t border-brand-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold tracking-widest text-brand-700 uppercase bg-brand-100 px-3.5 py-1 rounded-full">Simple 4-Step Journey</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">How to Adopt From Love4paws</h2>
+                <p class="text-slate-600 text-sm sm:text-base">We prioritize safe, compassionate, and transparent adoption matches.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-3xl border border-brand-100 shadow-xs relative space-y-3">
+                    <span class="w-10 h-10 rounded-2xl bg-brand-100 text-brand-700 font-heading font-bold flex items-center justify-center text-lg">1</span>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Browse & Match</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Explore our available dogs gallery to find a friend whose personality aligns with your household.</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-brand-100 shadow-xs relative space-y-3">
+                    <span class="w-10 h-10 rounded-2xl bg-brand-100 text-brand-700 font-heading font-bold flex items-center justify-center text-lg">2</span>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Fill Application</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Reach out via our contact email to fill out our questionnaire and share your home layout.</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-brand-100 shadow-xs relative space-y-3">
+                    <span class="w-10 h-10 rounded-2xl bg-brand-100 text-brand-700 font-heading font-bold flex items-center justify-center text-lg">3</span>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Meet & Greet</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Connect with our team in Sarasota, FL for an in-person meet & greet session.</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-brand-100 shadow-xs relative space-y-3">
+                    <span class="w-10 h-10 rounded-2xl bg-brand-500 text-white font-heading font-bold flex items-center justify-center text-lg">4</span>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Welcome Home</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Finalize adoption details, receive full medical history records, and welcome your pet home!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Calculator Section -->
+    <section id="donate" class="py-20 bg-white border-t border-brand-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold tracking-widest text-brand-700 uppercase bg-brand-100 px-3.5 py-1 rounded-full">100% Non-Profit Organization</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">Support Tammy Cates Love4paws</h2>
+                <p class="text-slate-600 text-sm sm:text-base">Every single dollar goes directly towards veterinary treatment, spay/neuter operations, and quality nutrition for dogs in our care.</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto bg-brand-50/30 p-6 sm:p-10 rounded-3xl shadow-xl border border-brand-100 space-y-8">
+                <div class="flex justify-center">
+                    <div class="bg-slate-100 p-1.5 rounded-2xl flex items-center gap-1">
+                        <button id="freq-one-time" onclick="setFrequency('one-time')" class="px-6 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-900 shadow-sm">One-Time Giving</button>
+                        <button id="freq-monthly" onclick="setFrequency('monthly')" class="px-6 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900">Monthly Sponsor ❤️</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <button onclick="selectDonationAmount(25)" id="btn-amt-25" class="amt-btn py-4 px-2 rounded-2xl border-2 border-brand-500 bg-brand-50/50 font-heading font-extrabold text-2xl text-brand-800 transition-all text-center">$25</button>
+                    <button onclick="selectDonationAmount(50)" id="btn-amt-50" class="amt-btn py-4 px-2 rounded-2xl border-2 border-slate-200 bg-white hover:border-brand-300 font-heading font-extrabold text-2xl text-slate-800 transition-all text-center">$50</button>
+                    <button onclick="selectDonationAmount(100)" id="btn-amt-100" class="amt-btn py-4 px-2 rounded-2xl border-2 border-slate-200 bg-white hover:border-brand-300 font-heading font-extrabold text-2xl text-slate-800 transition-all text-center">$100</button>
+                    <button onclick="selectDonationAmount(250)" id="btn-amt-250" class="amt-btn py-4 px-2 rounded-2xl border-2 border-slate-200 bg-white hover:border-brand-300 font-heading font-extrabold text-2xl text-slate-800 transition-all text-center">$250</button>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-slate-900 text-sm">Email Inquiries:</h4>
-                        <p class="text-xs text-amber-600 font-medium mt-0.5 select-all">tammycateslovepaws@gmail.com</p>
+                        <h4 id="impact-title" class="font-heading font-bold text-slate-900 text-sm">Your Impact at $25:</h4>
+                        <p id="impact-description" class="text-xs text-slate-600 mt-0.5">Provides full vaccination series and microchipping for 1 puppy.</p>
                     </div>
-                    <div class="pt-2">
-                        <a href="https://maps.google.com/?q=Sarasota,+FL" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-amber-600 hover:underline inline-flex items-center gap-1">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Or Enter Custom Amount ($)</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3 font-bold text-slate-400">$</span>
+                        <input type="number" id="custom-donation-input" placeholder="Enter custom amount..." min="5" class="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                    </div>
+                </div>
+
+                <button onclick="processDonation()" class="w-full py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-xl shadow-brand-500/25 transition-all text-base flex items-center justify-center gap-2">
+                    <i data-lucide="heart" class="w-5 h-5 fill-white"></i> Complete Donation
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Modal -->
+    <div id="donation-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center space-y-6 shadow-2xl">
+            <div class="w-20 h-20 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto">
+                <i data-lucide="heart" class="w-10 h-10 fill-brand-500 text-brand-500"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-heading font-bold text-slate-900">Thank You for Your Love!</h3>
+                <p id="donation-text" class="text-sm text-slate-600">Your donation has been logged for Tammy Cates Love4paws.</p>
+            </div>
+            <button onclick="closeDonationModal()" class="w-full py-3 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl text-sm transition-all">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Contact & Footer Section -->
+    <section id="contact" class="py-16 bg-slate-900 text-white border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white">
+                            <i data-lucide="paw-print" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-lg font-heading font-extrabold block leading-tight">Tammy Cates</span>
+                            <span class="text-xs font-heading font-semibold text-brand-400 block">Love4paws Adoption</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed max-w-md">
+                        Registered 501(c)(3) non-profit dog organization committed to caring for dogs, restoring health, and finding loving forever homes.
+                    </p>
+                </div>
+
+                <div class="space-y-3 md:text-right">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-brand-400">Location & Contact</h4>
+                    <p class="text-xs text-slate-400">📍 Location: Sarasota, FL, United States</p>
+                    <p class="text-xs text-slate-400">Email: <span class="text-brand-400 font-medium select-all">tammycateslovepaws@gmail.com</span></p>
+                    <p>
+                        <a href="https://maps.google.com/?q=Sarasota,+FL" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs text-amber-300 font-bold hover:underline">
                             🗺️ Get Directions on Google Maps
                         </a>
-                    </div>
-                </div>
-
-                <!-- Google Maps Interactive Embed -->
-                <div class="lg:col-span-2 h-80 rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113032.27771761611!2d-82.57467617835825!3d27.33643469032483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c3439347a2993f%3A0x5a1d7465ccaa706c!2sSarasota%2C%20FL%2C%20USA!5e0!3m2!1sen!2sus!4v1680000000000!5m2!1sen!2sus" 
-                        width="100%" 
-                        height="100%" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+                    </p>
                 </div>
             </div>
-        </section>
 
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-10 mt-16 text-xs text-slate-500">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid sm:grid-cols-3 gap-6 text-center sm:text-left">
-            <div class="space-y-2">
-                <h4 class="font-heading font-bold text-sm text-slate-900">Tammy Cates Love4paws</h4>
-                <p class="text-slate-500">Dedicated to rescuing, rehabilitating, and placing dogs into loving forever homes.</p>
-            </div>
-            <div class="space-y-2">
-                <h4 class="font-heading font-bold text-sm text-slate-900">Location & Contact</h4>
-                <p class="text-slate-500">📍 Location: Sarasota, FL, United States</p>
-                <p class="text-slate-500">Email: <span class="text-amber-600 font-medium select-all">tammycateslovepaws@gmail.com</span></p>
-                <p>
-                    <a href="https://maps.google.com/?q=Sarasota,+FL" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-amber-600 font-bold hover:underline">
-                        🗺️ Get Directions on Google Maps
-                    </a>
-                </p>
-            </div>
-            <div class="space-y-2 flex flex-col items-center sm:items-end justify-center">
-                <a href="admin.html" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition-all">
-                    Admin Dashboard
-                </a>
-                <p class="text-slate-400">&copy; 2026 Tammy Cates Love4paws. All rights reserved.</p>
+            <div class="pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
+                &copy; 2026 Tammy Cates Love4paws. All Rights Reserved. 501(c)(3) Non-Profit Organization.
             </div>
         </div>
-    </footer>
+    </section>
 
-    <!-- Public Catalog JavaScript Logic -->
+    <!-- Public Application & Gallery Script -->
     <script>
         const defaultDogs = [
             {
-                id: 101,
-                name: "Buster",
-                breed: "Golden Retriever Mix",
-                age: "Young",
-                size: "Large",
-                gender: "Male",
-                image: "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80",
-                bio: "Buster is an energetic and affectionate boy who loves playing fetch and going on long walks.",
-                status: "available"
+                id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", ageCategory: "Young", ageText: "2 Years Old", size: "Large", gender: "Male", status: "available",
+                image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80",
+                traits: ["Friendly", "Good with Kids", "High Energy", "House-Trained"],
+                bio: "Buster is a joyful Golden mix who loves long walks, playing fetch, and cuddles. He has thrived in foster care and is ready for his home."
             },
             {
-                id: 102,
-                name: "Luna",
-                breed: "Labrador Mix",
-                age: "Adult",
-                size: "Medium",
-                gender: "Female",
-                image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80",
-                bio: "Luna is calm, house-trained, and gets along wonderfully with kids and other dogs.",
-                status: "available"
+                id: "dog-2", name: "Luna", breed: "Beagle Mix", ageCategory: "Puppy", ageText: "8 Months Old", size: "Medium", gender: "Female", status: "available",
+                image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80",
+                traits: ["Curious", "Playful", "Leash Trained", "Dog Friendly"],
+                bio: "Luna has adorable floppy ears and an inquisitive nose! She gets along great with other dogs and loves learning new tricks."
             },
             {
-                id: 103,
-                name: "Milo",
-                breed: "Beagle Mix",
-                age: "Puppy",
-                size: "Small",
-                gender: "Male",
-                image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80",
-                bio: "Milo is a sweet playful puppy ready to learn commands and bring joy to your home.",
-                status: "available"
+                id: "dog-3", name: "Max", breed: "German Shepherd", ageCategory: "Adult", ageText: "5 Years Old", size: "Large", gender: "Male", status: "available",
+                image: "https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?auto=format&fit=crop&w=800&q=80",
+                traits: ["Loyal", "Protective", "Calm", "Intelligent"],
+                bio: "Max is a loyal German Shepherd with a gentle spirit. He excels at following routine and loves relaxed afternoon walks."
+            },
+            {
+                id: "dog-4", name: "Bella", breed: "Siberian Husky Mix", ageCategory: "Young", ageText: "1.5 Years Old", size: "Large", gender: "Female", status: "available",
+                image: "https://images.unsplash.com/photo-1605568427561-40dd23c2acea?auto=format&fit=crop&w=800&q=80",
+                traits: ["Adventurous", "Vocal", "Active", "Sweet"],
+                bio: "Bella features striking blue eyes and a big heart. She thrives with active owners who enjoy running and outdoor adventures."
+            },
+            {
+                id: "dog-5", name: "Charlie", breed: "Terrier Mix", ageCategory: "Adult", ageText: "4 Years Old", size: "Small", gender: "Male", status: "available",
+                image: "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=800&q=80",
+                traits: ["Lap Dog", "Quiet", "Apartment Friendly", "Cuddly"],
+                bio: "Charlie weighs just 18 lbs and is the ultimate cozy companion. Perfect for apartment living and couch cuddling."
+            },
+            {
+                id: "dog-6", name: "Daisy", breed: "Mixed Breed", ageCategory: "Puppy", ageText: "5 Months Old", size: "Small", gender: "Female", status: "available",
+                image: "https://images.unsplash.com/photo-1546527868-ccb7ee7dfa6a?auto=format&fit=crop&w=800&q=80",
+                traits: ["Affectionate", "Fast Learner", "Cat Friendly", "Gentle"],
+                bio: "Daisy is a gentle pup who loves treat training. She gets along wonderfully with cats and people of all ages."
             }
         ];
 
@@ -209,75 +483,201 @@
             return dogs;
         }
 
-        function renderPublicCatalog(dogsToRender) {
-            const grid = document.getElementById('public-dogs-grid');
+        window.renderPublicDogs = function(list) {
+            const grid = document.getElementById('dogs-grid');
+            const emptyState = document.getElementById('no-dogs-found');
             grid.innerHTML = '';
 
-            const availableDogs = dogsToRender.filter(d => d.status === 'available');
+            const available = list.filter(d => !d.status || d.status.toLowerCase() === 'available');
 
-            if (availableDogs.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-slate-200">
-                        <i data-lucide="dog" class="w-12 h-12 mx-auto text-slate-300 mb-2"></i>
-                        <h4 class="font-heading font-bold text-lg text-slate-800">No dogs currently available</h4>
-                        <p class="text-xs text-slate-500 mt-1">Check back soon or contact us directly for updates!</p>
-                    </div>
-                `;
-                lucide.createIcons();
+            if (available.length === 0) {
+                emptyState.classList.remove('hidden');
                 return;
+            } else {
+                emptyState.classList.add('hidden');
             }
 
-            availableDogs.forEach(dog => {
+            available.forEach(dog => {
                 const card = document.createElement('div');
-                card.className = "bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between";
-                
-                const mailtoLink = `mailto:tammycateslovepaws@gmail.com?subject=Adoption Inquiry regarding ${encodeURIComponent(dog.name)}`;
-
+                card.className = 'bg-white rounded-3xl overflow-hidden shadow-xs hover:shadow-xl border border-brand-100 transition-all duration-300 flex flex-col group';
                 card.innerHTML = `
-                    <div>
-                        <div class="relative h-56 overflow-hidden bg-slate-100">
-                            <img src="${dog.image}" alt="${dog.name}" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-white/90 backdrop-blur-xs text-amber-700 shadow-sm">
-                                ${dog.gender} • ${dog.age}
-                            </span>
-                        </div>
-                        <div class="p-6 space-y-3">
-                            <div>
-                                <h4 class="font-heading font-bold text-xl text-slate-900">${dog.name}</h4>
-                                <p class="text-xs font-semibold text-amber-600">${dog.breed} • ${dog.size} Size</p>
-                            </div>
-                            <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">${dog.bio}</p>
-                        </div>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${dog.image}" alt="${dog.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-xs">${dog.gender}</div>
+                        <div class="absolute bottom-3 left-3 bg-brand-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-xs">${dog.ageCategory || dog.age}</div>
                     </div>
-                    <div class="p-6 pt-0">
-                        <a href="${mailtoLink}" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-2">
-                            <i data-lucide="mail" class="w-4 h-4"></i> Adopt Me
-                        </a>
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <h3 class="text-xl font-heading font-bold text-slate-900">${dog.name}</h3>
+                                <span class="text-xs font-bold text-brand-700 bg-brand-100/70 px-2.5 py-1 rounded-lg">${dog.size}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium">${dog.breed} • ${dog.ageText || dog.age}</p>
+                            <div class="flex flex-wrap gap-1.5 mt-3">
+                                ${(dog.traits || ['Friendly', 'Loving']).map(t => `<span class="text-[11px] bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-md font-medium">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <button onclick="openDogModal('${dog.id}')" class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1">
+                                Full Profile <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onclick="openEmailModal('${dog.name}')" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl text-xs shadow-md shadow-brand-500/20 transition-all">
+                                Adopt Me
+                            </button>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
             lucide.createIcons();
+        };
+
+        window.applyFilters = function() {
+            const age = document.getElementById('filter-age').value;
+            const size = document.getElementById('filter-size').value;
+            const gender = document.getElementById('filter-gender').value;
+
+            const allDogs = getStoredDogs();
+            const filtered = allDogs.filter(dog => {
+                const matchesAge = age === 'all' || (dog.ageCategory === age || dog.age === age);
+                const matchesSize = size === 'all' || dog.size === size;
+                const matchesGender = gender === 'all' || dog.gender === gender;
+                return matchesAge && matchesSize && matchesGender;
+            });
+            window.renderPublicDogs(filtered);
+        };
+
+        document.getElementById('filter-age').addEventListener('change', window.applyFilters);
+        document.getElementById('filter-size').addEventListener('change', window.applyFilters);
+        document.getElementById('filter-gender').addEventListener('change', window.applyFilters);
+        document.getElementById('reset-filters').addEventListener('click', () => {
+            document.getElementById('filter-age').value = 'all';
+            document.getElementById('filter-size').value = 'all';
+            document.getElementById('filter-gender').value = 'all';
+            window.applyFilters();
+        });
+
+        window.openDogModal = function(id) {
+            const allDogs = getStoredDogs();
+            const dog = allDogs.find(d => d.id == id);
+            if (!dog) return;
+            const modalContent = document.getElementById('dog-modal-content');
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="relative h-72 md:h-full">
+                        <img src="${dog.image}" alt="${dog.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 md:p-8 space-y-6 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div>
+                                <span class="text-xs font-bold text-brand-600 uppercase tracking-widest">${dog.breed}</span>
+                                <h3 class="text-3xl font-heading font-extrabold text-slate-900">${dog.name}</h3>
+                                <p class="text-xs text-slate-500 font-medium mt-0.5">${dog.ageText || dog.age} • ${dog.gender} • ${dog.size} Size</p>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Personality & Story</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed">${dog.bio}</p>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100">
+                            <button onclick="closeDogModal(); openEmailModal('${dog.name}');" class="w-full py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 transition-all text-sm flex items-center justify-center gap-2">
+                                <i data-lucide="mail" class="w-4 h-4"></i> Adopt ${dog.name} (Contact Email)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('dog-modal').classList.remove('hidden');
+            document.getElementById('dog-modal').classList.add('flex');
+            lucide.createIcons();
+        };
+
+        window.closeDogModal = function() {
+            document.getElementById('dog-modal').classList.add('hidden');
+            document.getElementById('dog-modal').classList.remove('flex');
+        };
+
+        window.openEmailModal = function(dogName) {
+            document.getElementById('modal-dog-name').innerText = dogName;
+            document.getElementById('email-modal').classList.remove('hidden');
+        };
+
+        window.closeEmailModal = function() {
+            document.getElementById('email-modal').classList.add('hidden');
+        };
+
+        window.copyEmailToClipboard = function() {
+            const emailText = "tammycateslovepaws@gmail.com";
+            navigator.clipboard.writeText(emailText).then(() => {
+                alert("Email copied to clipboard: " + emailText);
+            });
+        };
+
+        // Donation functions
+        let currentDonationAmount = 25;
+        let donationFrequency = 'one-time';
+
+        window.selectDonationAmount = function(amt) {
+            currentDonationAmount = amt;
+            document.querySelectorAll('.amt-btn').forEach(btn => {
+                btn.className = "amt-btn py-4 px-2 rounded-2xl border-2 border-slate-200 bg-white hover:border-brand-300 font-heading font-extrabold text-2xl text-slate-800 transition-all text-center";
+            });
+            const activeBtn = document.getElementById(`btn-amt-${amt}`);
+            if (activeBtn) {
+                activeBtn.className = "amt-btn py-4 px-2 rounded-2xl border-2 border-brand-500 bg-brand-50/50 font-heading font-extrabold text-2xl text-brand-800 transition-all text-center";
+            }
+            document.getElementById('custom-donation-input').value = '';
+            updateImpactText(amt);
+        };
+
+        window.setFrequency = function(freq) {
+            donationFrequency = freq;
+            if (freq === 'one-time') {
+                document.getElementById('freq-one-time').className = "px-6 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-900 shadow-sm";
+                document.getElementById('freq-monthly').className = "px-6 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900";
+            } else {
+                document.getElementById('freq-monthly').className = "px-6 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-900 shadow-sm";
+                document.getElementById('freq-one-time').className = "px-6 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900";
+            }
+        };
+
+        function updateImpactText(amt) {
+            const title = document.getElementById('impact-title');
+            const desc = document.getElementById('impact-description');
+            title.innerText = `Your Impact at $${amt}:`;
+            if (amt <= 25) {
+                desc.innerText = "Provides full vaccination series and microchipping for 1 puppy.";
+            } else if (amt <= 50) {
+                desc.innerText = "Covers essential rescue food and high-grade medical examination supplies.";
+            } else if (amt <= 100) {
+                desc.innerText = "Funds life-saving spay/neuter surgical procedures for a rescue dog.";
+            } else {
+                desc.innerText = "Fully sponsors complete emergency medical care and rehabilitation for a dog in urgent need.";
+            }
         }
 
-        function filterDogs() {
-            const sizeFilter = document.getElementById('filter-size').value;
-            const genderFilter = document.getElementById('filter-gender').value;
-            let dogs = getStoredDogs();
+        window.processDonation = function() {
+            const customInput = document.getElementById('custom-donation-input').value;
+            const finalAmt = customInput ? customInput : currentDonationAmount;
+            document.getElementById('donation-text').innerText = `Your $${finalAmt} (${donationFrequency}) contribution has been logged. Thank you for supporting Tammy Cates Love4paws!`;
+            document.getElementById('donation-modal').classList.remove('hidden');
+            document.getElementById('donation-modal').classList.add('flex');
+        };
 
-            if (sizeFilter !== 'all') {
-                dogs = dogs.filter(d => d.size === sizeFilter);
-            }
-            if (genderFilter !== 'all') {
-                dogs = dogs.filter(d => d.gender === genderFilter);
-            }
-
-            renderPublicCatalog(dogs);
-        }
+        window.closeDonationModal = function() {
+            document.getElementById('donation-modal').classList.add('hidden');
+            document.getElementById('donation-modal').classList.remove('flex');
+        };
 
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            renderPublicCatalog(getStoredDogs());
+            if (localStorage.getItem('love4paws_dogs')) {
+                let saved = JSON.parse(localStorage.getItem('love4paws_dogs'));
+                if (saved.length === 0) {
+                    localStorage.removeItem('love4paws_dogs');
+                }
+            }
+            window.renderPublicDogs(getStoredDogs());
         });
     </script>
 </body>
