@@ -62,7 +62,7 @@
                     Adoption Applications
                 </button>
                 <button onclick="switchTab('dogs')" id="btn-tab-dogs" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all">
-                    Dog Inventory & Images
+                    Dog Inventory & Featured
                 </button>
             </div>
 
@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Dogs Inventory & Image Controls (Add / Edit) -->
+            <!-- Tab 2: Dogs Inventory & Image Controls (Add / Edit / Feature) -->
             <div id="tab-content-dogs" class="hidden space-y-6">
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                     <div class="flex items-center justify-between">
@@ -123,7 +123,7 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="font-heading font-bold text-lg text-slate-900">Manage Dog Inventory</h3>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Manage Dog Inventory & Featured Status</h3>
                     <div id="admin-dogs-container" class="space-y-2">
                         <!-- Populated via JS -->
                     </div>
@@ -218,20 +218,14 @@
         }
 
         function loadAdminDogs() {
-            let dogs = JSON.parse(localStorage.getItem('love4paws_dogs'));
-            if (!dogs || dogs.length === 0) {
-                // Default fallback dogs if empty
-                dogs = [
-                    { id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", ageCategory: "Young", size: "Large", gender: "Male", image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80", bio: "Buster is a joyful Golden mix.", status: "available" },
-                    { id: "dog-2", name: "Luna", breed: "Beagle Mix", ageCategory: "Puppy", size: "Medium", gender: "Female", image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80", bio: "Luna has adorable floppy ears.", status: "available" }
-                ];
-                localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
-            }
+            let dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
+            let featuredId = localStorage.getItem('love4paws_featured_id');
 
             const container = document.getElementById('admin-dogs-container');
             container.innerHTML = '';
 
             dogs.forEach(dog => {
+                const isFeatured = String(dog.id) === String(featuredId) || (!featuredId && dog.id === "dog-1");
                 const item = document.createElement('div');
                 item.className = "flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm";
                 item.innerHTML = `
@@ -239,11 +233,14 @@
                         <img src="${dog.image}" class="w-10 h-10 rounded-lg object-cover">
                         <div>
                             <span class="font-bold text-slate-900">${dog.name}</span>
-                            <span class="block text-xs text-slate-500">${dog.breed} (${dog.status || 'available'})</span>
+                            <span class="block text-xs text-slate-500">${dog.breed} ${isFeatured ? '• <strong class="text-amber-600">Featured Hero Dog</strong>' : ''}</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="editDogRecord('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-100 text-amber-800 hover:bg-amber-200">Edit</button>
+                        <button onclick="setFeaturedDog('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold ${isFeatured ? 'bg-amber-500 text-white' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'}">
+                            ${isFeatured ? 'Featured ⭐' : 'Set as Featured'}
+                        </button>
+                        <button onclick="editDogRecord('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300">Edit</button>
                         <button onclick="deleteDogRecord('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-100 text-rose-800 hover:bg-rose-200">Delete</button>
                     </div>
                 `;
@@ -251,13 +248,16 @@
             });
         }
 
+        function setFeaturedDog(id) {
+            localStorage.setItem('love4paws_featured_id', id);
+            alert("Featured dog updated successfully! Check the public site hero section.");
+            loadAdminDogs();
+        }
+
         function editDogRecord(id) {
             const dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
             const dog = dogs.find(d => String(d.id) === String(id));
-            if (!dog) {
-                alert("Dog record not found.");
-                return;
-            }
+            if (!dog) return;
 
             document.getElementById('edit-dog-id').value = dog.id;
             document.getElementById('dog-name').value = dog.name || '';
@@ -309,7 +309,6 @@
 
             const finalizeSave = (finalImage) => {
                 if (editId) {
-                    // Update existing dog
                     dogs = dogs.map(d => {
                         if (String(d.id) === String(editId)) {
                             d.name = name;
@@ -325,10 +324,10 @@
                     });
                     alert('Dog listing updated successfully!');
                 } else {
-                    // Add new dog
                     let imageSrc = finalImage || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80";
+                    let newId = "dog-" + Date.now();
                     dogs.unshift({
-                        id: "dog-" + Date.now(),
+                        id: newId,
                         name,
                         breed,
                         ageCategory: age,
@@ -348,7 +347,6 @@
                 loadAdminDogs();
             };
 
-            // If a computer file was selected, read it as Data URL
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(uploadEvent) {
