@@ -45,13 +45,13 @@
             <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left">
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Passcode</label>
-                    <input type="password" id="admin-password" required placeholder="admin123" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    <input type="password" id="admin-password" required placeholder="good1234" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                 </div>
                 <button type="submit" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm transition-all shadow-md">
                     Unlock Dashboard
                 </button>
             </form>
-            <p class="text-xs text-slate-400">Default password: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700 font-mono">admin123</code></p>
+            <p class="text-xs text-slate-400">Default password: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700 font-mono">good1234</code></p>
         </div>
 
         <!-- Dashboard View (Hidden until login) -->
@@ -124,12 +124,12 @@
         function handleAdminLogin(e) {
             e.preventDefault();
             const pass = document.getElementById('admin-password').value;
-            if (pass === 'admin123') {
+            if (pass === 'good1234') {
                 document.getElementById('admin-login-view').classList.add('hidden');
                 document.getElementById('admin-dashboard-view').classList.remove('hidden');
                 loadAdminData();
             } else {
-                alert('Incorrect passcode. Try admin123');
+                alert('Incorrect passcode. Try good1234');
             }
         }
 
