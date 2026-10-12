@@ -30,6 +30,9 @@
                 <a href="#dogs-section" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-amber-50 text-amber-800 font-bold text-xs hover:bg-amber-100 transition-all">
                     Available Dogs
                 </a>
+                <a href="#location-section" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200 transition-all">
+                    Location & Map
+                </a>
                 <a href="admin.html" class="text-xs font-semibold text-slate-500 hover:text-slate-900 flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition-all">
                     <i data-lucide="shield" class="w-4 h-4 text-amber-600"></i> Admin Portal
                 </a>
@@ -59,13 +62,13 @@
     </section>
 
     <!-- Main Content: Dog Catalog -->
-    <main id="dogs-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-8">
+    <main id="dogs-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-12">
         
         <!-- Filter Bar -->
         <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-xs flex flex-col md:flex-row gap-4 items-center justify-between">
             <div class="w-full md:w-auto flex-1">
                 <h3 class="font-heading font-bold text-xl text-slate-900">Adoptable Dogs</h3>
-                <p class="text-xs text-slate-500">Click "Adopt Me" on any profile to see our contact email for inquiries.</p>
+                <p class="text-xs text-slate-500">Click "Adopt Me" on any profile to send an email to tammycateslovepaws@gmail.com.</p>
             </div>
             <div class="flex flex-wrap gap-2 w-full md:w-auto">
                 <select id="filter-size" onchange="filterDogs()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white font-medium text-slate-700 focus:outline-none">
@@ -87,32 +90,51 @@
             <!-- Populated dynamically via JavaScript -->
         </div>
 
-    </main>
+        <!-- Embedded Map & Location Section -->
+        <section id="location-section" class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Our Rescue Location</span>
+                    <h3 class="font-heading font-bold text-2xl text-slate-900">Visit & Connect</h3>
+                </div>
+                <a href="https://maps.google.com/?q=Sarasota,+FL" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm">
+                    🗺️ Get Directions on Google Maps
+                </a>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-6 items-center">
+                <div class="space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">📍 Location:</h4>
+                        <p class="text-xs text-slate-600 mt-0.5">Sarasota, FL, United States</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">Email Inquiries:</h4>
+                        <p class="text-xs text-amber-600 font-medium mt-0.5 select-all">tammycateslovepaws@gmail.com</p>
+                    </div>
+                    <div class="pt-2">
+                        <a href="https://maps.google.com/?q=Sarasota,+FL" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-amber-600 hover:underline inline-flex items-center gap-1">
+                            🗺️ Get Directions on Google Maps
+                        </a>
+                    </div>
+                </div>
 
-    <!-- Email Contact Modal Pop-up -->
-    <div id="email-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200">
-            <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto">
-                <i data-lucide="mail" class="w-6 h-6"></i>
+                <!-- Google Maps Interactive Embed -->
+                <div class="lg:col-span-2 h-80 rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113032.27771761611!2d-82.57467617835825!3d27.33643469032483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c3439347a2993f%3A0x5a1d7465ccaa706c!2sSarasota%2C%20FL%2C%20USA!5e0!3m2!1sen!2sus!4v1680000000000!5m2!1sen!2sus" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
             </div>
-            <div class="text-center space-y-1">
-                <h3 class="font-heading font-bold text-xl text-slate-900">Adopt <span id="modal-dog-name" class="text-amber-600"></span></h3>
-                <p class="text-xs text-slate-500">Send your adoption inquiry directly to our rescue email:</p>
-            </div>
-            <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center space-y-1">
-                <span class="text-xs text-slate-400 block uppercase font-bold tracking-wider">Contact Email</span>
-                <span id="modal-email-text" class="text-base sm:text-lg font-mono font-bold text-slate-900 select-all">tammycateslovepaws@gmail.com</span>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="copyEmailToClipboard()" class="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
-                    <i data-lucide="copy" class="w-4 h-4"></i> Copy Email
-                </button>
-                <button onclick="closeEmailModal()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
+        </section>
+
+    </main>
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-10 mt-16 text-xs text-slate-500">
@@ -123,7 +145,7 @@
             </div>
             <div class="space-y-2">
                 <h4 class="font-heading font-bold text-sm text-slate-900">Location & Contact</h4>
-                <p class="text-slate-500">Sarasota, Florida</p>
+                <p class="text-slate-500">📍 Location: Sarasota, FL, United States</p>
                 <p class="text-slate-500">Email: <span class="text-amber-600 font-medium select-all">tammycateslovepaws@gmail.com</span></p>
                 <p>
                     <a href="https://maps.google.com/?q=Sarasota,+FL" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-amber-600 font-bold hover:underline">
@@ -209,6 +231,8 @@
                 const card = document.createElement('div');
                 card.className = "bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between";
                 
+                const mailtoLink = `mailto:tammycateslovepaws@gmail.com?subject=Adoption Inquiry regarding ${encodeURIComponent(dog.name)}`;
+
                 card.innerHTML = `
                     <div>
                         <div class="relative h-56 overflow-hidden bg-slate-100">
@@ -226,30 +250,14 @@
                         </div>
                     </div>
                     <div class="p-6 pt-0">
-                        <button onclick="openEmailModal('${dog.name}')" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-2">
+                        <a href="${mailtoLink}" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-2">
                             <i data-lucide="mail" class="w-4 h-4"></i> Adopt Me
-                        </button>
+                        </a>
                     </div>
                 `;
                 grid.appendChild(card);
             });
             lucide.createIcons();
-        }
-
-        function openEmailModal(dogName) {
-            document.getElementById('modal-dog-name').innerText = dogName;
-            document.getElementById('email-modal').classList.remove('hidden');
-        }
-
-        function closeEmailModal() {
-            document.getElementById('email-modal').classList.add('hidden');
-        }
-
-        function copyEmailToClipboard() {
-            const emailText = "tammycateslovepaws@gmail.com";
-            navigator.clipboard.writeText(emailText).then(() => {
-                alert("Email copied to clipboard: " + emailText);
-            });
         }
 
         function filterDogs() {
