@@ -78,7 +78,7 @@
             <div id="tab-content-dogs" class="hidden space-y-6">
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                     <div class="flex items-center justify-between">
-                        <h3 id="form-title" class="font-heading font-bold text-lg text-slate-900">Add New Adoptable Dog & Images</h3>
+                        <h3 id="form-title" class="font-heading font-bold text-lg text-slate-900">Add New Adoptable Dog (ImgBB Link)</h3>
                         <button id="cancel-edit-btn" onclick="resetDogForm()" class="hidden text-xs text-rose-600 hover:underline font-bold">Cancel Edit</button>
                     </div>
 
@@ -102,19 +102,11 @@
                             <option value="Female">Female</option>
                         </select>
                         
-                        <!-- Image Upload Options: Computer or URL -->
-                        <div class="sm:col-span-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                            <label class="block text-xs font-bold uppercase text-slate-700">Dog Image Source</label>
-                            <div class="grid sm:grid-cols-2 gap-4">
-                                <div>
-                                    <span class="text-[11px] text-slate-500 block mb-1">Option A: Upload Image from Computer</span>
-                                    <input type="file" id="dog-file-input" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100">
-                                </div>
-                                <div>
-                                    <span class="text-[11px] text-slate-500 block mb-1">Option B: Or Enter Image URL</span>
-                                    <input type="url" id="dog-image-url" placeholder="https://example.com/dog.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
-                                </div>
-                            </div>
+                        <!-- ImgBB Direct Image URL Input -->
+                        <div class="sm:col-span-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                            <label class="block text-xs font-bold uppercase text-slate-700">Dog Image Direct Link (From ImgBB)</label>
+                            <input type="url" id="dog-image-url" placeholder="https://i.ibb.co/xxxxx/dog.jpg" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
+                            <p class="text-[11px] text-slate-500">Upload your image to <a href="https://imgbb.com" target="_blank" class="text-amber-600 underline font-semibold">ImgBB.com</a>, copy the <b>Direct Link</b>, and paste it here.</p>
                         </div>
 
                         <textarea id="dog-bio" placeholder="Short Bio / Story..." rows="2" class="sm:col-span-3 px-3 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
@@ -265,7 +257,7 @@
             document.getElementById('dog-age').value = dog.ageCategory || dog.age || 'Puppy';
             document.getElementById('dog-size').value = dog.size || 'Small';
             document.getElementById('dog-gender').value = dog.gender || 'Male';
-            document.getElementById('dog-image-url').value = dog.image && !dog.image.startsWith('data:') ? dog.image : '';
+            document.getElementById('dog-image-url').value = dog.image || '';
             document.getElementById('dog-bio').value = dog.bio || '';
 
             document.getElementById('form-title').innerText = `Edit Dog: ${dog.name}`;
@@ -278,7 +270,7 @@
         function resetDogForm() {
             document.getElementById('edit-dog-id').value = '';
             document.querySelector('form').reset();
-            document.getElementById('form-title').innerText = 'Add New Adoptable Dog & Images';
+            document.getElementById('form-title').innerText = 'Add New Adoptable Dog (ImgBB Link)';
             document.getElementById('form-submit-btn').innerText = 'Add Dog to Catalog';
             document.getElementById('cancel-edit-btn').classList.add('hidden');
         }
@@ -301,66 +293,46 @@
             const size = document.getElementById('dog-size').value;
             const gender = document.getElementById('dog-gender').value;
             const bio = document.getElementById('dog-bio').value;
-            
-            const fileInput = document.getElementById('dog-file-input');
-            const urlInput = document.getElementById('dog-image-url').value.trim();
+            const imageUrl = document.getElementById('dog-image-url').value.trim();
 
             let dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
 
-            const finalizeSave = (finalImage) => {
-                if (editId) {
-                    dogs = dogs.map(d => {
-                        if (String(d.id) === String(editId)) {
-                            d.name = name;
-                            d.breed = breed;
-                            d.ageCategory = age;
-                            d.ageText = age + " Old";
-                            d.size = size;
-                            d.gender = gender;
-                            d.bio = bio;
-                            if (finalImage) d.image = finalImage;
-                        }
-                        return d;
-                    });
-                    alert('Dog listing updated successfully!');
-                } else {
-                    let imageSrc = finalImage || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80";
-                    let newId = "dog-" + Date.now();
-                    dogs.unshift({
-                        id: newId,
-                        name,
-                        breed,
-                        ageCategory: age,
-                        ageText: age + " Old",
-                        size,
-                        gender,
-                        image: imageSrc,
-                        bio,
-                        traits: ["Friendly", "Loving"],
-                        status: 'available'
-                    });
-                    alert('New dog added successfully!');
-                }
-
-                localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
-                resetDogForm();
-                loadAdminDogs();
-            };
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(uploadEvent) {
-                    finalizeSave(uploadEvent.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
+            if (editId) {
+                dogs = dogs.map(d => {
+                    if (String(d.id) === String(editId)) {
+                        d.name = name;
+                        d.breed = breed;
+                        d.ageCategory = age;
+                        d.ageText = age + " Old";
+                        d.size = size;
+                        d.gender = gender;
+                        d.bio = bio;
+                        if (imageUrl) d.image = imageUrl;
+                    }
+                    return d;
+                });
+                alert('Dog listing updated successfully!');
             } else {
-                let existingImage = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80";
-                if (editId) {
-                    let found = dogs.find(d => String(d.id) === String(editId));
-                    if (found) existingImage = found.image;
-                }
-                finalizeSave(urlInput || existingImage);
+                let newId = "dog-" + Date.now();
+                dogs.unshift({
+                    id: newId,
+                    name,
+                    breed,
+                    ageCategory: age,
+                    ageText: age + " Old",
+                    size,
+                    gender,
+                    image: imageUrl,
+                    bio,
+                    traits: ["Friendly", "Loving"],
+                    status: 'available'
+                });
+                alert('New dog added successfully with ImgBB image link!');
             }
+
+            localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
+            resetDogForm();
+            loadAdminDogs();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
