@@ -129,10 +129,8 @@
                         <div class="bg-white p-4 rounded-3xl shadow-2xl border border-brand-100 space-y-4">
                             <!-- Image Container with Blurred Image Background -->
                             <div class="relative h-80 sm:h-96 rounded-2xl overflow-hidden group bg-slate-900 flex items-center justify-center">
-                                <!-- Blurred Background Image -->
                                 <img id="hero-dog-bg" src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80" alt="" class="absolute inset-0 w-full h-full object-cover filter blur-xl scale-110 opacity-60">
                                 <div class="absolute inset-0 bg-slate-950/30"></div>
-                                <!-- Sharp Foreground Image -->
                                 <img id="hero-dog-image" src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80" alt="Featured Dog" class="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-brand-800 flex items-center gap-1.5 shadow-md">
                                     <i data-lucide="heart" class="w-4 h-4 fill-brand-500 text-brand-500"></i> Featured Dog
@@ -169,26 +167,11 @@
                 <p class="text-slate-600 text-sm sm:text-base">Explore our live inventory managed directly from the admin portal.</p>
             </div>
 
-            <!-- Filter Controls Bar -->
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-brand-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+            <!-- Filter Controls Bar (Size Filter Removed) -->
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-brand-100 grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Age</label>
-                    <select id="filter-age" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
-                        <option value="all">All Ages</option>
-                        <option value="Puppy">Puppy</option>
-                        <option value="Young">Young</option>
-                        <option value="Adult">Adult</option>
-                        <option value="Senior">Senior</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Size</label>
-                    <select id="filter-size" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
-                        <option value="all">All Sizes</option>
-                        <option value="Small">Small</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Large">Large</option>
-                    </select>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Age / Search</label>
+                    <input type="text" id="filter-age" placeholder="Filter by age..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Gender</label>
@@ -432,13 +415,13 @@
     <script>
         const defaultDogs = [
             {
-                id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", ageCategory: "Young", ageText: "2 Years Old", size: "Large", gender: "Male", status: "available",
+                id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", age: "2 Years Old", gender: "Male", status: "available",
                 image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80",
                 traits: ["Friendly", "Good with Kids", "High Energy", "House-Trained"],
                 bio: "Buster is a joyful Golden mix who loves long walks, playing fetch, and cuddles. He has thrived in foster care and is ready for his home."
             },
             {
-                id: "dog-2", name: "Luna", breed: "Beagle Mix", ageCategory: "Puppy", ageText: "8 Months Old", size: "Medium", gender: "Female", status: "available",
+                id: "dog-2", name: "Luna", breed: "Beagle Mix", age: "8 Months Old", gender: "Female", status: "available",
                 image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80",
                 traits: ["Curious", "Playful", "Leash Trained", "Dog Friendly"],
                 bio: "Luna has adorable floppy ears and an inquisitive nose! She gets along great with other dogs and loves learning new tricks."
@@ -468,7 +451,7 @@
                 document.getElementById('hero-dog-bg').src = featuredDog.image;
                 document.getElementById('hero-dog-image').src = featuredDog.image;
                 document.getElementById('hero-dog-name').innerText = "Meet " + featuredDog.name;
-                document.getElementById('hero-dog-subtitle').innerText = `${featuredDog.breed} • ${featuredDog.ageText || featuredDog.age}`;
+                document.getElementById('hero-dog-subtitle').innerText = `${featuredDog.breed} • ${featuredDog.ageText || featuredDog.age || ''}`;
             }
         }
 
@@ -496,15 +479,12 @@
                         <div class="absolute inset-0 bg-slate-950/20"></div>
                         <img src="${dog.image}" alt="${dog.name}" class="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute top-3 right-3 z-20 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-xs">${dog.gender}</div>
-                        <div class="absolute bottom-3 left-3 z-20 bg-brand-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-xs">${dog.ageCategory || dog.age}</div>
+                        <div class="absolute bottom-3 left-3 z-20 bg-brand-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-xs">${dog.ageText || dog.age || ''}</div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
                         <div>
-                            <div class="flex items-center justify-between mb-1">
-                                <h3 class="text-xl font-heading font-bold text-slate-900">${dog.name}</h3>
-                                <span class="text-xs font-bold text-brand-700 bg-brand-100/70 px-2.5 py-1 rounded-lg">${dog.size}</span>
-                            </div>
-                            <p class="text-xs text-slate-500 font-medium">${dog.breed} • ${dog.ageText || dog.age}</p>
+                            <h3 class="text-xl font-heading font-bold text-slate-900 mb-1">${dog.name}</h3>
+                            <p class="text-xs text-slate-500 font-medium">${dog.breed}</p>
                             <div class="flex flex-wrap gap-1.5 mt-3">
                                 ${(dog.traits || ['Friendly', 'Loving']).map(t => `<span class="text-[11px] bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-md font-medium">${t}</span>`).join('')}
                             </div>
@@ -525,28 +505,25 @@
         };
 
         window.applyFilters = function() {
-            const age = document.getElementById('filter-age').value;
-            const size = document.getElementById('filter-size').value;
+            const ageSearch = document.getElementById('filter-age').value.toLowerCase();
             const gender = document.getElementById('filter-gender').value;
 
             const allDogs = getStoredDogs();
             const filtered = allDogs.filter(dog => {
-                const matchesAge = age === 'all' || (dog.ageCategory === age || dog.age === age);
-                const matchesSize = size === 'all' || dog.size === size;
+                const dogAge = (dog.ageText || dog.age || '').toLowerCase();
+                const matchesAge = ageSearch === '' || dogAge.includes(ageSearch);
                 const matchesGender = gender === 'all' || dog.gender === gender;
-                return matchesAge && matchesSize && matchesGender;
+                return matchesAge && matchesGender;
             });
             window.renderPublicDogs(filtered);
         };
 
-        document.getElementById('filter-age').addEventListener('change', window.applyFilters);
-        document.getElementById('filter-size').addEventListener('change', window.applyFilters);
+        document.getElementById('filter-age').addEventListener('input', window.applyFilters);
         document.getElementById('filter-gender').addEventListener('change', window.applyFilters);
         document.getElementById('reset-filters').addEventListener('click', () => {
-            document.getElementById('filter-age').value = 'all';
-            document.getElementById('filter-size').value = 'all';
+            document.getElementById('filter-age').value = '';
             document.getElementById('filter-gender').value = 'all';
-            window.applyFilters();
+            window.renderPublicDogs(getStoredDogs());
         });
 
         window.openDogModal = function(id) {
@@ -566,7 +543,7 @@
                             <div>
                                 <span class="text-xs font-bold text-brand-600 uppercase tracking-widest">${dog.breed}</span>
                                 <h3 class="text-3xl font-heading font-extrabold text-slate-900">${dog.name}</h3>
-                                <p class="text-xs text-slate-500 font-medium mt-0.5">${dog.ageText || dog.age} • ${dog.gender} • ${dog.size} Size</p>
+                                <p class="text-xs text-slate-500 font-medium mt-0.5">${dog.ageText || dog.age || ''} • ${dog.gender}</p>
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Personality & Story</h4>
