@@ -167,7 +167,7 @@
                 <p class="text-slate-600 text-sm sm:text-base">Explore our live inventory managed directly from the admin portal.</p>
             </div>
 
-            <!-- Filter Controls Bar (Size Filter Removed) -->
+            <!-- Filter Controls Bar -->
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-brand-100 grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Age / Search</label>
@@ -434,7 +434,6 @@
                 localStorage.setItem('love4paws_dogs', JSON.stringify(defaultDogs));
                 dogs = defaultDogs;
             } else {
-                // Ensure default dogs are always included if missing from local storage
                 defaultDogs.forEach(defDog => {
                     if (!dogs.some(d => String(d.id) === String(defDog.id))) {
                         dogs.push(defDog);
@@ -634,8 +633,6 @@
             }
         }
 
-    <script>
-        // ... (rest of donation and initialization scripts)
         window.processDonation = function() {
             const customInput = document.getElementById('custom-donation-input').value;
             const finalAmt = customInput ? customInput : currentDonationAmount;
