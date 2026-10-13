@@ -329,7 +329,7 @@
                 <div class="bg-white p-6 rounded-3xl border border-brand-100 shadow-xs relative space-y-3">
                     <span class="w-10 h-10 rounded-2xl bg-brand-100 text-brand-700 font-heading font-bold flex items-center justify-center text-lg">3</span>
                     <h3 class="font-heading font-bold text-lg text-slate-900">Meet & Greet</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">Connect with our team in Sarasota, FL for an in-person meet & greet session.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Connect with our team for an in-person meet & greet session.</p>
                 </div>
                 <div class="bg-white p-6 rounded-3xl border border-brand-100 shadow-xs relative space-y-3">
                     <span class="w-10 h-10 rounded-2xl bg-brand-500 text-white font-heading font-bold flex items-center justify-center text-lg">4</span>
@@ -340,7 +340,7 @@
         </div>
     </section>
 
-    <!-- Wishlist & eGift Cards Section (Email text removed as requested) -->
+    <!-- Wishlist & eGift Cards Section -->
     <section id="donate" class="py-20 bg-white border-t border-brand-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
@@ -471,8 +471,7 @@
                 </div>
 
                 <div class="space-y-3 md:text-right">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-brand-400">Location & Contact</h4>
-                    <p class="text-xs text-slate-400">📍 Location: Sarasota, FL, United States</p>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-brand-400">Contact</h4>
                     <p class="text-xs text-slate-400">Email: <span class="text-brand-400 font-medium select-all">tammycateslovepaws@gmail.com</span></p>
                 </div>
             </div>
@@ -692,14 +691,14 @@
             if (cachedStories.length === 0) return;
             currentStoryIndex = (currentStoryIndex + 1) % cachedStories.length;
             renderStorySlide();
-            startStoryAutoTimer(); // Reset timer when clicked manually
+            startStoryAutoTimer();
         };
 
         window.prevStory = function() {
             if (cachedStories.length === 0) return;
             currentStoryIndex = (currentStoryIndex - 1 + cachedStories.length) % cachedStories.length;
             renderStorySlide();
-            startStoryAutoTimer(); // Reset timer when clicked manually
+            startStoryAutoTimer();
         };
 
         window.applyFilters = function() {
