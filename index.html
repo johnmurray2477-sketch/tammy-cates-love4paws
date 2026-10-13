@@ -77,9 +77,10 @@
             <nav class="hidden lg:flex items-center gap-7 font-medium text-sm text-slate-600">
                 <a href="#home" class="hover:text-brand-600 transition-colors py-1">Home</a>
                 <a href="#dogs" class="hover:text-brand-600 transition-colors py-1">Meet Our Dogs</a>
-                <a href="#about" class="hover:text-brand-600 transition-colors py-1">About Tammy & Mission</a>
+                <a href="#transformations" class="hover:text-brand-600 transition-colors py-1">Rescue Stories</a>
+                <a href="#about" class="hover:text-brand-600 transition-colors py-1">About Tammy</a>
                 <a href="#process" class="hover:text-brand-600 transition-colors py-1">How to Adopt</a>
-                <a href="#donate" class="hover:text-brand-600 transition-colors py-1">Wishlist & eGift Cards</a>
+                <a href="#donate" class="hover:text-brand-600 transition-colors py-1">Wishlist</a>
                 <a href="#contact" class="hover:text-brand-600 transition-colors py-1">Contact</a>
             </nav>
 
@@ -193,7 +194,43 @@
                 </div>
                 <h3 class="text-xl font-heading font-bold text-slate-800">No dogs matched your filters</h3>
                 <p class="text-sm text-slate-500">Try adjusting your filters or resetting them to view all available dogs.</p>
-                <button onclick="resetAllFilters()" class="px-6 py-2.5 bg-brand-500 text-white font-semibold rounded-xl text-sm shadow-md">Reset All Filters</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Rescue & Transformation Stories Slideshow Section -->
+    <section id="transformations" class="py-20 bg-white border-t border-brand-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="text-xs font-bold tracking-widest text-brand-700 uppercase bg-brand-100 px-3.5 py-1 rounded-full">Second Chances</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">Rescue & Transformation Stories</h2>
+                <p class="text-slate-600 text-sm sm:text-base">Witness the incredible power of love, medical care, and dedication. Swipe through our before-and-after transformations.</p>
+            </div>
+
+            <!-- Slideshow Card Container -->
+            <div id="slideshow-container" class="relative bg-brand-50/50 rounded-3xl border border-brand-100 p-6 sm:p-10 shadow-xl overflow-hidden">
+                <!-- Dynamically populated via JavaScript -->
+                <div id="story-slide-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Loaded dynamically -->
+                </div>
+
+                <!-- Slideshow Navigation Controls -->
+                <div class="flex items-center justify-between mt-8 pt-6 border-t border-brand-200/60">
+                    <button onclick="prevStory()" class="px-4 py-2.5 rounded-xl bg-white hover:bg-brand-100 text-slate-700 font-bold text-xs shadow-sm transition-all flex items-center gap-2 border border-slate-200">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous Story
+                    </button>
+                    <span id="story-counter" class="text-xs font-bold text-brand-800 uppercase tracking-widest">Story 1 of 1</span>
+                    <button onclick="nextStory()" class="px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2">
+                        Next Story <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fallback Empty State for Stories -->
+            <div id="no-stories-state" class="hidden text-center py-12 bg-slate-50 rounded-3xl border border-slate-200">
+                <p class="text-xs text-slate-500 italic">No transformation stories added yet. Check back soon or add them via the admin dashboard!</p>
             </div>
 
         </div>
@@ -303,14 +340,14 @@
         </div>
     </section>
 
-    <!-- Wishlist & eGift Cards Section (Replaces Donation Calculator) -->
+    <!-- Wishlist & eGift Cards Section -->
     <section id="donate" class="py-20 bg-white border-t border-brand-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
             <div class="text-center max-w-2xl mx-auto space-y-3">
                 <span class="text-xs font-bold tracking-widest text-brand-700 uppercase bg-brand-100 px-3.5 py-1 rounded-full">100% Non-Profit Organization</span>
                 <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">Support via Wishlist & eGift Cards</h2>
-                <p class="text-slate-600 text-sm sm:text-base">Support Tammy Cates Love4paws by purchasing urgently needed supplies or sending digital eGift cards directly to our email.</p>
+                <p class="text-slate-600 text-sm sm:text-base">Support Tammy Cates Love4paws by purchasing urgently needed supplies or sending digital eGift cards directly to our rescue email.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -466,30 +503,41 @@
         const db = getFirestore(app);
 
         let cachedDogs = [];
+        let cachedStories = [];
+        let currentStoryIndex = 0;
 
-        async function fetchLiveDogs() {
+        async function fetchLiveData() {
             try {
-                const querySnapshot = await getDocs(collection(db, "dogs"));
+                // Fetch Dogs
+                const dogsSnapshot = await getDocs(collection(db, "dogs"));
                 let firebaseDogs = [];
-                querySnapshot.forEach((docSnap) => {
+                dogsSnapshot.forEach((docSnap) => {
                     firebaseDogs.push({ id: docSnap.id, ...docSnap.data() });
                 });
-
                 cachedDogs = firebaseDogs;
+
+                // Fetch Stories
+                const storiesSnapshot = await getDocs(collection(db, "stories"));
+                let firebaseStories = [];
+                storiesSnapshot.forEach((docSnap) => {
+                    firebaseStories.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                cachedStories = firebaseStories;
+
             } catch (err) {
-                console.error("Error fetching live dogs from Firebase:", err);
-                cachedDogs = [];
+                console.error("Error fetching live data from Firebase:", err);
             }
 
             loadFeaturedDogInHero();
             window.renderPublicDogs(cachedDogs);
+            renderStorySlide();
         }
 
         window.getStoredDogs = function() {
             return cachedDogs;
         };
 
-        // Load Featured Dog into Hero Banner (Prioritizes explicit isFeatured or defaults to the first dog)
+        // Load Featured Dog into Hero Banner
         function loadFeaturedDogInHero() {
             const dogs = window.getStoredDogs();
             if (dogs.length === 0) return;
@@ -565,6 +613,79 @@
                 grid.appendChild(card);
             });
             lucide.createIcons();
+        };
+
+        // Slideshow Render Function
+        function renderStorySlide() {
+            const container = document.getElementById('story-slide-content');
+            const counter = document.getElementById('story-counter');
+            const noStoriesState = document.getElementById('no-stories-state');
+            const slideshowContainer = document.getElementById('slideshow-container');
+
+            if (cachedStories.length === 0) {
+                slideshowContainer.classList.add('hidden');
+                noStoriesState.classList.remove('hidden');
+                return;
+            } else {
+                slideshowContainer.classList.remove('hidden');
+                noStoriesState.classList.add('hidden');
+            }
+
+            if (currentStoryIndex >= cachedStories.length) currentStoryIndex = 0;
+            if (currentStoryIndex < 0) currentStoryIndex = cachedStories.length - 1;
+
+            const story = cachedStories[currentStoryIndex];
+            counter.innerText = `Story ${currentStoryIndex + 1} of ${cachedStories.length}`;
+
+            container.innerHTML = `
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
+                        <i data-lucide="heart-handshake" class="w-4 h-4 text-amber-600"></i> Transformation Journey: ${story.name}
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900">${story.title || (story.name + "'s Rescue Story")}</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white rounded-2xl border border-amber-200/60 shadow-xs space-y-1">
+                            <span class="text-[11px] uppercase font-bold text-rose-600 tracking-wider">Before Rescue</span>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${story.beforeText}</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-2xl border border-emerald-200/60 shadow-xs space-y-1">
+                            <span class="text-[11px] uppercase font-bold text-emerald-600 tracking-wider">After Transformation</span>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${story.afterText}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 grid grid-cols-2 gap-4">
+                    <div class="space-y-2 text-center">
+                        <div class="relative h-60 sm:h-72 rounded-2xl overflow-hidden bg-slate-900 shadow-md border-2 border-rose-200">
+                            <img src="${story.beforeImage}" alt="${story.name} Before" class="w-full h-full object-cover">
+                            <span class="absolute top-3 left-3 bg-rose-600 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase shadow">Before</span>
+                        </div>
+                        <span class="text-xs font-bold text-slate-500">Day of Rescue</span>
+                    </div>
+                    <div class="space-y-2 text-center">
+                        <div class="relative h-60 sm:h-72 rounded-2xl overflow-hidden bg-slate-900 shadow-md border-2 border-emerald-200">
+                            <img src="${story.afterImage}" alt="${story.name} After" class="w-full h-full object-cover">
+                            <span class="absolute top-3 left-3 bg-emerald-600 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase shadow">After</span>
+                        </div>
+                        <span class="text-xs font-bold text-emerald-700">Healthy & Happy</span>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        window.nextStory = function() {
+            if (cachedStories.length === 0) return;
+            currentStoryIndex = (currentStoryIndex + 1) % cachedStories.length;
+            renderStorySlide();
+        };
+
+        window.prevStory = function() {
+            if (cachedStories.length === 0) return;
+            currentStoryIndex = (currentStoryIndex - 1 + cachedStories.length) % cachedStories.length;
+            renderStorySlide();
         };
 
         window.applyFilters = function() {
@@ -650,7 +771,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            fetchLiveDogs();
+            fetchLiveData();
         });
     </script>
 </body>

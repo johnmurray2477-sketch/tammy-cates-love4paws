@@ -60,12 +60,15 @@
         <div id="admin-dashboard-view" class="hidden space-y-6">
             
             <!-- Tabs -->
-            <div class="flex gap-2 border-b border-slate-200 pb-3">
-                <button onclick="switchTab('apps')" id="btn-tab-apps" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-amber-600 text-white shadow-sm transition-all">
+            <div class="flex gap-2 border-b border-slate-200 pb-3 overflow-x-auto">
+                <button onclick="switchTab('apps')" id="btn-tab-apps" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-amber-600 text-white shadow-sm transition-all whitespace-nowrap">
                     Adoption Applications
                 </button>
-                <button onclick="switchTab('dogs')" id="btn-tab-dogs" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all">
+                <button onclick="switchTab('dogs')" id="btn-tab-dogs" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all whitespace-nowrap">
                     Dog Inventory & Featured
+                </button>
+                <button onclick="switchTab('stories')" id="btn-tab-stories" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all whitespace-nowrap">
+                    ⭐ Rescue Stories & Transformations
                 </button>
             </div>
 
@@ -77,7 +80,7 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Dogs Inventory & Image Controls (Add / Edit) -->
+            <!-- Tab 2: Dogs Inventory -->
             <div id="tab-content-dogs" class="hidden space-y-6">
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                     <div class="flex items-center justify-between">
@@ -89,26 +92,21 @@
                         <input type="hidden" id="edit-dog-id">
                         <input type="text" id="dog-name" placeholder="Dog Name" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
                         <input type="text" id="dog-breed" placeholder="Breed" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
-                        
-                        <!-- Freeform Age Input -->
-                        <input type="text" id="dog-age" placeholder="Age (e.g. 2 Years, 6 Months)" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
+                        <input type="text" id="dog-age" placeholder="Age (e.g. 2 Years)" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
                         
                         <select id="dog-gender" class="px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
 
-                        <!-- Featured Toggle -->
                         <select id="dog-featured" class="px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white sm:col-span-2">
                             <option value="false">Standard Catalog Dog</option>
                             <option value="true">⭐ Set as Featured Dog on Hero Banner</option>
                         </select>
                         
-                        <!-- ImgBB Direct Image URL Input -->
                         <div class="sm:col-span-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                             <label class="block text-xs font-bold uppercase text-slate-700">Dog Image Direct Link (From ImgBB)</label>
                             <input type="url" id="dog-image-url" placeholder="https://i.ibb.co/xxxxx/dog.jpg" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
-                            <p class="text-[11px] text-slate-500">Upload your image to <a href="https://imgbb.com" target="_blank" class="text-amber-600 underline font-semibold">ImgBB.com</a>, copy the <b>Direct Link</b>, and paste it here.</p>
                         </div>
 
                         <textarea id="dog-bio" placeholder="Short Bio / Story..." rows="2" class="sm:col-span-3 px-3 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
@@ -118,9 +116,43 @@
 
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                     <h3 class="font-heading font-bold text-lg text-slate-900">Manage Cloud Dog Inventory</h3>
-                    <div id="admin-dogs-container" class="space-y-2">
-                        <!-- Populated via JS -->
+                    <div id="admin-dogs-container" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Rescue Stories & Transformations -->
+            <div id="tab-content-stories" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 id="story-form-title" class="font-heading font-bold text-lg text-slate-900">Add Transformation Story</h3>
+                        <button id="cancel-story-edit-btn" onclick="resetStoryForm()" class="hidden text-xs text-rose-600 hover:underline font-bold">Cancel Edit</button>
                     </div>
+
+                    <form onsubmit="handleSaveStoryRecord(event)" class="grid sm:grid-cols-2 gap-3">
+                        <input type="hidden" id="edit-story-id">
+                        <input type="text" id="story-name" placeholder="Dog Name (e.g. Rocky)" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
+                        <input type="text" id="story-title" placeholder="Story Headline (e.g. From Neglect to Joy)" required class="px-3 py-2 rounded-xl border border-slate-300 text-sm">
+
+                        <textarea id="story-before" placeholder="Before Rescue Description (e.g. Found starved on the street...)" rows="2" required class="sm:col-span-2 px-3 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
+                        <textarea id="story-after" placeholder="After Transformation Description (e.g. Fully healed and adopted by a loving family...)" rows="2" required class="sm:col-span-2 px-3 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
+                        
+                        <div class="p-3 bg-rose-50 rounded-2xl border border-rose-200 space-y-1">
+                            <label class="block text-[11px] font-bold uppercase text-rose-800">Before Image Direct Link (ImgBB)</label>
+                            <input type="url" id="story-before-img" placeholder="https://i.ibb.co/.../before.jpg" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
+                        </div>
+
+                        <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 space-y-1">
+                            <label class="block text-[11px] font-bold uppercase text-emerald-800">After Image Direct Link (ImgBB)</label>
+                            <input type="url" id="story-after-img" placeholder="https://i.ibb.co/.../after.jpg" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
+                        </div>
+
+                        <button type="submit" id="story-submit-btn" class="sm:col-span-2 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-sm transition-all shadow-md">Publish Story to Cloud Slideshow</button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Manage Transformation Stories</h3>
+                    <div id="admin-stories-container" class="space-y-2"></div>
                 </div>
             </div>
 
@@ -151,6 +183,7 @@
         const db = getFirestore(app);
 
         let adminDogsCache = [];
+        let adminStoriesCache = [];
 
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('love4paws_admin_auth') === 'true') {
@@ -184,20 +217,31 @@
         window.switchTab = function(tab) {
             const appsTab = document.getElementById('tab-content-apps');
             const dogsTab = document.getElementById('tab-content-dogs');
+            const storiesTab = document.getElementById('tab-content-stories');
+
             const btnApps = document.getElementById('btn-tab-apps');
             const btnDogs = document.getElementById('btn-tab-dogs');
+            const btnStories = document.getElementById('btn-tab-stories');
+
+            appsTab.classList.add('hidden');
+            dogsTab.classList.add('hidden');
+            storiesTab.classList.add('hidden');
+
+            btnApps.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all whitespace-nowrap";
+            btnDogs.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all whitespace-nowrap";
+            btnStories.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all whitespace-nowrap";
 
             if (tab === 'apps') {
                 appsTab.classList.remove('hidden');
-                dogsTab.classList.add('hidden');
-                btnApps.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-amber-600 text-white shadow-sm transition-all";
-                btnDogs.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all";
-            } else {
+                btnApps.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-amber-600 text-white shadow-sm transition-all whitespace-nowrap";
+            } else if (tab === 'dogs') {
                 dogsTab.classList.remove('hidden');
-                appsTab.classList.add('hidden');
-                btnDogs.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-amber-600 text-white shadow-sm transition-all";
-                btnApps.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all";
+                btnDogs.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-amber-600 text-white shadow-sm transition-all whitespace-nowrap";
                 loadAdminDogs();
+            } else if (tab === 'stories') {
+                storiesTab.classList.remove('hidden');
+                btnStories.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-amber-600 text-white shadow-sm transition-all whitespace-nowrap";
+                loadAdminStories();
             }
         };
 
@@ -274,6 +318,49 @@
             lucide.createIcons();
         }
 
+        async function loadAdminStories() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "stories"));
+                adminStoriesCache = [];
+                querySnapshot.forEach((docSnap) => {
+                    adminStoriesCache.push({ id: docSnap.id, ...docSnap.data() });
+                });
+            } catch (err) {
+                console.error("Error loading stories:", err);
+            }
+
+            const container = document.getElementById('admin-stories-container');
+            container.innerHTML = '';
+
+            if (adminStoriesCache.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 italic p-4">No transformation stories found in cloud.</p>`;
+                return;
+            }
+
+            adminStoriesCache.forEach(story => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm";
+                item.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="flex gap-1">
+                            <img src="${story.beforeImage}" class="w-10 h-10 rounded-lg object-cover border border-rose-300" title="Before">
+                            <img src="${story.afterImage}" class="w-10 h-10 rounded-lg object-cover border border-emerald-300" title="After">
+                        </div>
+                        <div>
+                            <span class="font-bold text-slate-900">${story.title} (${story.name})</span>
+                            <span class="block text-xs text-slate-500 truncate max-w-xs">${story.afterText}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="editStoryRecord('${story.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300">Edit</button>
+                        <button onclick="deleteStoryRecord('${story.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-100 text-rose-800 hover:bg-rose-200">Delete</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
         window.editDogRecord = function(id) {
             const dog = adminDogsCache.find(d => String(d.id) === String(id));
             if (!dog) return;
@@ -296,10 +383,37 @@
 
         window.resetDogForm = function() {
             document.getElementById('edit-dog-id').value = '';
-            document.querySelector('form').reset();
+            document.querySelectorAll('#tab-content-dogs form')[0].reset();
             document.getElementById('form-title').innerText = 'Add New Adoptable Dog (ImgBB Link)';
             document.getElementById('form-submit-btn').innerText = 'Add Dog to Cloud Catalog';
             document.getElementById('cancel-edit-btn').classList.add('hidden');
+        };
+
+        window.editStoryRecord = function(id) {
+            const story = adminStoriesCache.find(s => String(s.id) === String(id));
+            if (!story) return;
+
+            document.getElementById('edit-story-id').value = story.id;
+            document.getElementById('story-name').value = story.name || '';
+            document.getElementById('story-title').value = story.title || '';
+            document.getElementById('story-before').value = story.beforeText || '';
+            document.getElementById('story-after').value = story.afterText || '';
+            document.getElementById('story-before-img').value = story.beforeImage || '';
+            document.getElementById('story-after-img').value = story.afterImage || '';
+
+            document.getElementById('story-form-title').innerText = `Edit Story: ${story.name}`;
+            document.getElementById('story-submit-btn').innerText = 'Save Story Changes';
+            document.getElementById('cancel-story-edit-btn').classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.resetStoryForm = function() {
+            document.getElementById('edit-story-id').value = '';
+            document.querySelectorAll('#tab-content-stories form')[0].reset();
+            document.getElementById('story-form-title').innerText = 'Add Transformation Story';
+            document.getElementById('story-submit-btn').innerText = 'Publish Story to Cloud Slideshow';
+            document.getElementById('cancel-story-edit-btn').classList.add('hidden');
         };
 
         window.deleteDogRecord = async function(id) {
@@ -311,6 +425,19 @@
                 } catch (err) {
                     console.error("Error deleting dog:", err);
                     alert("Failed to delete dog.");
+                }
+            }
+        };
+
+        window.deleteStoryRecord = async function(id) {
+            if (confirm("Are you sure you want to delete this transformation story?")) {
+                try {
+                    await deleteDoc(doc(db, "stories", id));
+                    alert("Story deleted successfully!");
+                    loadAdminStories();
+                } catch (err) {
+                    console.error("Error deleting story:", err);
+                    alert("Failed to delete story.");
                 }
             }
         };
@@ -341,7 +468,36 @@
                 loadAdminDogs();
             } catch (err) {
                 console.error("Error saving dog to cloud:", err);
-                alert("Failed to save. Make sure your Firestore database is created in Firebase Console.");
+                alert("Failed to save. Make sure your Firestore database is created.");
+            }
+        };
+
+        window.handleSaveStoryRecord = async function(e) {
+            e.preventDefault();
+            const editId = document.getElementById('edit-story-id').value;
+            const name = document.getElementById('story-name').value;
+            const title = document.getElementById('story-title').value;
+            const beforeText = document.getElementById('story-before').value;
+            const afterText = document.getElementById('story-after').value;
+            const beforeImage = document.getElementById('story-before-img').value.trim();
+            const afterImage = document.getElementById('story-after-img').value.trim();
+
+            try {
+                if (editId) {
+                    const docRef = doc(db, "stories", editId);
+                    await updateDoc(docRef, { name, title, beforeText, afterText, beforeImage, afterImage });
+                    alert('Transformation story updated successfully!');
+                } else {
+                    await addDoc(collection(db, "stories"), {
+                        name, title, beforeText, afterText, beforeImage, afterImage, createdAt: Date.now()
+                    });
+                    alert('New transformation story published successfully!');
+                }
+                resetStoryForm();
+                loadAdminStories();
+            } catch (err) {
+                console.error("Error saving story to cloud:", err);
+                alert("Failed to save story.");
             }
         };
     </script>
