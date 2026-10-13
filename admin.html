@@ -22,7 +22,7 @@
             </div>
             <div>
                 <h1 class="font-heading font-bold text-lg leading-tight">Love4paws Admin Portal</h1>
-                <p class="text-xs text-amber-300">Cloud Synchronized Dashboard</p>
+                <p class="text-xs text-amber-300">Secure Cloud Synchronized Dashboard</p>
             </div>
         </div>
         <div class="flex items-center gap-4">
@@ -43,7 +43,7 @@
             </div>
             <div class="space-y-1">
                 <h2 class="text-2xl font-heading font-bold text-slate-900">Admin Authentication</h2>
-                <p class="text-xs text-slate-500">Enter your passcode to manage records.</p>
+                <p class="text-xs text-slate-500">Enter your passcode to manage secure records.</p>
             </div>
             <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left">
                 <div>
@@ -167,6 +167,7 @@
     <!-- Firebase SDKs & Admin Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -180,13 +181,19 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
         let adminDogsCache = [];
         let adminStoriesCache = [];
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             if (sessionStorage.getItem('love4paws_admin_auth') === 'true') {
+                try {
+                    await signInAnonymously(auth);
+                } catch (err) {
+                    console.error("Auto sign-in error:", err);
+                }
                 document.getElementById('admin-login-view').classList.add('hidden');
                 document.getElementById('admin-dashboard-view').classList.remove('hidden');
                 loadAdminData();
@@ -194,14 +201,22 @@
             lucide.createIcons();
         });
 
-        window.handleAdminLogin = function(e) {
+        window.handleAdminLogin = async function(e) {
             e.preventDefault();
             const pass = document.getElementById('admin-password').value;
             if (pass && pass.trim().length > 0) {
-                sessionStorage.setItem('love4paws_admin_auth', 'true');
-                document.getElementById('admin-login-view').classList.add('hidden');
-                document.getElementById('admin-dashboard-view').classList.remove('hidden');
-                loadAdminData();
+                try {
+                    // Authenticate securely with Firebase so Firestore write rules pass
+                    await signInAnonymously(auth);
+                    
+                    sessionStorage.setItem('love4paws_admin_auth', 'true');
+                    document.getElementById('admin-login-view').classList.add('hidden');
+                    document.getElementById('admin-dashboard-view').classList.remove('hidden');
+                    loadAdminData();
+                } catch (err) {
+                    console.error("Authentication error:", err);
+                    alert("Failed to authenticate with Firebase. Make sure Anonymous Authentication is enabled in your Firebase Console.");
+                }
             } else {
                 alert('Please enter a valid passcode.');
             }
@@ -468,7 +483,7 @@
                 loadAdminDogs();
             } catch (err) {
                 console.error("Error saving dog to cloud:", err);
-                alert("Failed to save. Make sure your Firestore database is created.");
+                alert("Failed to save. Make sure you are logged into the admin dashboard.");
             }
         };
 
@@ -497,7 +512,7 @@
                 loadAdminStories();
             } catch (err) {
                 console.error("Error saving story to cloud:", err);
-                alert("Failed to save story.");
+                alert("Failed to save story. Make sure you are logged into the admin dashboard.");
             }
         };
     </script>
