@@ -433,6 +433,13 @@
             if (!dogs || dogs.length === 0) {
                 localStorage.setItem('love4paws_dogs', JSON.stringify(defaultDogs));
                 dogs = defaultDogs;
+            } else {
+                // Ensure default dogs are always included if missing from local storage
+                defaultDogs.forEach(defDog => {
+                    if (!dogs.some(d => String(d.id) === String(defDog.id))) {
+                        dogs.push(defDog);
+                    }
+                });
             }
             return dogs;
         }
@@ -627,6 +634,8 @@
             }
         }
 
+    <script>
+        // ... (rest of donation and initialization scripts)
         window.processDonation = function() {
             const customInput = document.getElementById('custom-donation-input').value;
             const finalAmt = customInput ? customInput : currentDonationAmount;
