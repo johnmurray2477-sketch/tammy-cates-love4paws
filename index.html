@@ -411,9 +411,26 @@
         </div>
     </section>
 
-    <!-- Public Application & Gallery Script -->
-    <script>
-        // HARDCODED DOGS: This guarantees dogs always appear live on GitHub Pages for everyone.
+    <!-- Firebase Firestore Live Sync & Application Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyADzC9SPI-OXZAjCVYLXrHf4Ljo8m0lfbE",
+            authDomain: "love4paws-5c323.firebaseapp.com",
+            projectId: "love4paws-5c323",
+            storageBucket: "love4paws-5c323.firebasestorage.app",
+            messagingSenderId: "43901237248",
+            appId: "1:43901237248:web:04403ccaba5d1d388bc0e5",
+            measurementId: "G-4KG6H4Z581"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let cachedDogs = [];
+
         const defaultDogs = [
             {
                 id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", age: "2 Years Old", gender: "Male", status: "available",
@@ -429,25 +446,36 @@
             }
         ];
 
-        function getStoredDogs() {
-            // Always return the hardcoded list so GitHub Pages shows them instantly to every visitor
-            let stored = JSON.parse(localStorage.getItem('love4paws_dogs'));
-            if (!stored || stored.length === 0) {
-                return defaultDogs;
-            }
-            // Combine any user-stored ones with hardcoded ones
-            let combined = [...defaultDogs];
-            stored.forEach(dog => {
-                if (!combined.some(d => String(d.id) === String(dog.id))) {
-                    combined.push(dog);
+        async function fetchLiveDogs() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "dogs"));
+                let firebaseDogs = [];
+                querySnapshot.forEach((docSnap) => {
+                    firebaseDogs.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                if (firebaseDogs.length > 0) {
+                    cachedDogs = firebaseDogs;
+                } else {
+                    cachedDogs = defaultDogs;
                 }
-            });
-            return combined;
+            } catch (err) {
+                console.error("Error fetching live dogs from Firebase:", err);
+                cachedDogs = defaultDogs;
+            }
+
+            loadFeaturedDogInHero();
+            window.renderPublicDogs(cachedDogs);
         }
+
+        // Global function expected by gallery and filters
+        window.getStoredDogs = function() {
+            return cachedDogs.length > 0 ? cachedDogs : defaultDogs;
+        };
 
         // Load Featured Dog into Hero Banner
         function loadFeaturedDogInHero() {
-            const dogs = getStoredDogs();
+            const dogs = window.getStoredDogs();
             let featuredId = localStorage.getItem('love4paws_featured_id');
             let featuredDog = dogs.find(d => String(d.id) === String(featuredId));
 
@@ -456,10 +484,15 @@
             }
 
             if (featuredDog) {
-                document.getElementById('hero-dog-bg').src = featuredDog.image;
-                document.getElementById('hero-dog-image').src = featuredDog.image;
-                document.getElementById('hero-dog-name').innerText = "Meet " + featuredDog.name;
-                document.getElementById('hero-dog-subtitle').innerText = `${featuredDog.breed} • ${featuredDog.ageText || featuredDog.age || ''}`;
+                const bgEl = document.getElementById('hero-dog-bg');
+                const imgEl = document.getElementById('hero-dog-image');
+                const nameEl = document.getElementById('hero-dog-name');
+                const subEl = document.getElementById('hero-dog-subtitle');
+
+                if (bgEl) bgEl.src = featuredDog.image;
+                if (imgEl) imgEl.src = featuredDog.image;
+                if (nameEl) nameEl.innerText = "Meet " + featuredDog.name;
+                if (subEl) subEl.innerText = `${featuredDog.breed} • ${featuredDog.ageText || featuredDog.age || ''}`;
             }
         }
 
@@ -471,22 +504,21 @@
             const available = list.filter(d => !d.status || d.status.toLowerCase() === 'available');
 
             if (available.length === 0) {
-                emptyState.classList.remove('hidden');
+                if (emptyState) emptyState.classList.remove('hidden');
                 return;
             } else {
-                emptyState.classList.add('hidden');
+                if (emptyState) emptyState.classList.add('hidden');
             }
 
             available.forEach(dog => {
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-3xl overflow-hidden shadow-xs hover:shadow-xl border border-brand-100 transition-all duration-300 flex flex-col group';
                 card.innerHTML = `
-                    <!-- Image Container with Blurred Image Background -->
                     <div class="relative h-64 overflow-hidden bg-slate-900 flex items-center justify-center">
                         <img src="${dog.image}" alt="" class="absolute inset-0 w-full h-full object-cover filter blur-xl scale-110 opacity-60">
                         <div class="absolute inset-0 bg-slate-950/20"></div>
                         <img src="${dog.image}" alt="${dog.name}" class="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-3 right-3 z-20 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-xs">${dog.gender}</div>
+                        <div class="absolute top-3 right-3 z-20 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-xs">${dog.gender || 'Male'}</div>
                         <div class="absolute bottom-3 left-3 z-20 bg-brand-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-xs">${dog.ageText || dog.age || ''}</div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
@@ -516,7 +548,7 @@
             const ageSearch = document.getElementById('filter-age').value.toLowerCase();
             const gender = document.getElementById('filter-gender').value;
 
-            const allDogs = getStoredDogs();
+            const allDogs = window.getStoredDogs();
             const filtered = allDogs.filter(dog => {
                 const dogAge = (dog.ageText || dog.age || '').toLowerCase();
                 const matchesAge = ageSearch === '' || dogAge.includes(ageSearch);
@@ -531,11 +563,11 @@
         document.getElementById('reset-filters').addEventListener('click', () => {
             document.getElementById('filter-age').value = '';
             document.getElementById('filter-gender').value = 'all';
-            window.renderPublicDogs(getStoredDogs());
+            window.renderPublicDogs(window.getStoredDogs());
         });
 
         window.openDogModal = function(id) {
-            const allDogs = getStoredDogs();
+            const allDogs = window.getStoredDogs();
             const dog = allDogs.find(d => String(d.id) === String(id));
             if (!dog) return;
             const modalContent = document.getElementById('dog-modal-content');
@@ -623,15 +655,17 @@
         function updateImpactText(amt) {
             const title = document.getElementById('impact-title');
             const desc = document.getElementById('impact-description');
-            title.innerText = `Your Impact at $${amt}:`;
-            if (amt <= 25) {
-                desc.innerText = "Provides full vaccination series and microchipping for 1 puppy.";
-            } else if (amt <= 50) {
-                desc.innerText = "Covers essential rescue food and high-grade medical examination supplies.";
-            } else if (amt <= 100) {
-                desc.innerText = "Funds life-saving spay/neuter surgical procedures for a rescue dog.";
-            } else {
-                desc.innerText = "Fully sponsors complete emergency medical care and rehabilitation for a dog in urgent need.";
+            if (title && desc) {
+                title.innerText = `Your Impact at $${amt}:`;
+                if (amt <= 25) {
+                    desc.innerText = "Provides full vaccination series and microchipping for 1 puppy.";
+                } else if (amt <= 50) {
+                    desc.innerText = "Covers essential rescue food and high-grade medical examination supplies.";
+                } else if (amt <= 100) {
+                    desc.innerText = "Funds life-saving spay/neuter surgical procedures for a rescue dog.";
+                } else {
+                    desc.innerText = "Fully sponsors complete emergency medical care and rehabilitation for a dog in urgent need.";
+                }
             }
         }
 
@@ -650,8 +684,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            loadFeaturedDogInHero();
-            window.renderPublicDogs(getStoredDogs());
+            fetchLiveDogs();
         });
     </script>
 </body>
