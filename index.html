@@ -413,6 +413,7 @@
 
     <!-- Public Application & Gallery Script -->
     <script>
+        // HARDCODED DOGS: This guarantees dogs always appear live on GitHub Pages for everyone.
         const defaultDogs = [
             {
                 id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", age: "2 Years Old", gender: "Male", status: "available",
@@ -429,21 +430,19 @@
         ];
 
         function getStoredDogs() {
-            let dogs = JSON.parse(localStorage.getItem('love4paws_dogs'));
-            
-            // Force-load defaults if storage is completely empty or corrupted
-            if (!dogs || dogs.length === 0) {
-                localStorage.setItem('love4paws_dogs', JSON.stringify(defaultDogs));
+            // Always return the hardcoded list so GitHub Pages shows them instantly to every visitor
+            let stored = JSON.parse(localStorage.getItem('love4paws_dogs'));
+            if (!stored || stored.length === 0) {
                 return defaultDogs;
             }
-            
-            // Ensure any new default dogs are merged in
-            defaultDogs.forEach(defDog => {
-                if (!dogs.some(d => String(d.id) === String(defDog.id))) {
-                    dogs.push(defDog);
+            // Combine any user-stored ones with hardcoded ones
+            let combined = [...defaultDogs];
+            stored.forEach(dog => {
+                if (!combined.some(d => String(d.id) === String(dog.id))) {
+                    combined.push(dog);
                 }
             });
-            return dogs;
+            return combined;
         }
 
         // Load Featured Dog into Hero Banner
