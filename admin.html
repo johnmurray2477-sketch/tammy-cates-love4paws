@@ -97,6 +97,12 @@
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
+
+                        <!-- Featured Toggle -->
+                        <select id="dog-featured" class="px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white sm:col-span-2">
+                            <option value="false">Standard Catalog Dog</option>
+                            <option value="true">⭐ Set as Featured Dog on Hero Banner</option>
+                        </select>
                         
                         <!-- ImgBB Direct Image URL Input -->
                         <div class="sm:col-span-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
@@ -246,13 +252,15 @@
             }
 
             adminDogsCache.forEach(dog => {
+                const dogImg = dog.image || dog.imageUrl || '';
+                const isFeat = dog.isFeatured === true || dog.isFeatured === "true";
                 const item = document.createElement('div');
                 item.className = "flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm";
                 item.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <img src="${dog.image}" class="w-10 h-10 rounded-lg object-cover">
+                        <img src="${dogImg}" class="w-10 h-10 rounded-lg object-cover">
                         <div>
-                            <span class="font-bold text-slate-900">${dog.name}</span>
+                            <span class="font-bold text-slate-900">${dog.name} ${isFeat ? '<span class="text-[10px] bg-amber-500 text-white px-2 py-0.5 rounded-full font-bold ml-1">Featured</span>' : ''}</span>
                             <span class="block text-xs text-slate-500">${dog.breed} • ${dog.age || ''}</span>
                         </div>
                     </div>
@@ -275,7 +283,8 @@
             document.getElementById('dog-breed').value = dog.breed || '';
             document.getElementById('dog-age').value = dog.age || '';
             document.getElementById('dog-gender').value = dog.gender || 'Male';
-            document.getElementById('dog-image-url').value = dog.image || '';
+            document.getElementById('dog-featured').value = (dog.isFeatured === true || dog.isFeatured === "true") ? "true" : "false";
+            document.getElementById('dog-image-url').value = dog.image || dog.imageUrl || '';
             document.getElementById('dog-bio').value = dog.bio || '';
 
             document.getElementById('form-title').innerText = `Edit Dog: ${dog.name}`;
@@ -313,17 +322,18 @@
             const breed = document.getElementById('dog-breed').value;
             const age = document.getElementById('dog-age').value;
             const gender = document.getElementById('dog-gender').value;
+            const isFeatured = document.getElementById('dog-featured').value === "true";
             const bio = document.getElementById('dog-bio').value;
             const image = document.getElementById('dog-image-url').value.trim();
 
             try {
                 if (editId) {
                     const docRef = doc(db, "dogs", editId);
-                    await updateDoc(docRef, { name, breed, age, gender, bio, image });
+                    await updateDoc(docRef, { name, breed, age, gender, isFeatured, bio, image });
                     alert('Dog listing updated in cloud successfully!');
                 } else {
                     await addDoc(collection(db, "dogs"), {
-                        name, breed, age, gender, bio, image, status: 'available', createdAt: Date.now()
+                        name, breed, age, gender, isFeatured, bio, image, status: 'available', createdAt: Date.now()
                     });
                     alert('New dog added to cloud catalog successfully!');
                 }
