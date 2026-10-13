@@ -22,7 +22,7 @@
             </div>
             <div>
                 <h1 class="font-heading font-bold text-lg leading-tight">Love4paws Admin Portal</h1>
-                <p class="text-xs text-amber-300">Standalone Management Dashboard</p>
+                <p class="text-xs text-amber-300">Cloud Synchronized Dashboard</p>
             </div>
         </div>
         <div class="flex items-center gap-4">
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Dogs Inventory & Image Controls (Add / Edit / Feature) -->
+            <!-- Tab 2: Dogs Inventory & Image Controls (Add / Edit) -->
             <div id="tab-content-dogs" class="hidden space-y-6">
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                     <div class="flex items-center justify-between">
@@ -106,12 +106,12 @@
                         </div>
 
                         <textarea id="dog-bio" placeholder="Short Bio / Story..." rows="2" class="sm:col-span-3 px-3 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
-                        <button type="submit" id="form-submit-btn" class="sm:col-span-3 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-sm transition-all shadow-md">Add Dog to Catalog</button>
+                        <button type="submit" id="form-submit-btn" class="sm:col-span-3 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-sm transition-all shadow-md">Add Dog to Cloud Catalog</button>
                     </form>
                 </div>
 
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="font-heading font-bold text-lg text-slate-900">Manage Dog Inventory & Featured Status</h3>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Manage Cloud Dog Inventory</h3>
                     <div id="admin-dogs-container" class="space-y-2">
                         <!-- Populated via JS -->
                     </div>
@@ -126,37 +126,25 @@
         &copy; 2026 Tammy Cates Love4paws Admin Portal. Secure Management Console.
     </footer>
 
-    <!-- Admin JavaScript Logic -->
-    <script>
-        const defaultDogs = [
-            {
-                id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", age: "2 Years Old", gender: "Male", status: "available",
-                image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80",
-                traits: ["Friendly", "Good with Kids", "High Energy", "House-Trained"],
-                bio: "Buster is a joyful Golden mix who loves long walks, playing fetch, and cuddles. He has thrived in foster care and is ready for his home."
-            },
-            {
-                id: "dog-2", name: "Luna", breed: "Beagle Mix", age: "8 Months Old", gender: "Female", status: "available",
-                image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80",
-                traits: ["Curious", "Playful", "Leash Trained", "Dog Friendly"],
-                bio: "Luna has adorable floppy ears and an inquisitive nose! She gets along great with other dogs and loves learning new tricks."
-            }
-        ];
+    <!-- Firebase SDKs & Admin Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-        function getAdminDogs() {
-            let stored = JSON.parse(localStorage.getItem('love4paws_dogs'));
-            if (!stored || stored.length === 0) {
-                localStorage.setItem('love4paws_dogs', JSON.stringify(defaultDogs));
-                return defaultDogs;
-            }
-            defaultDogs.forEach(defDog => {
-                if (!stored.some(d => String(d.id) === String(defDog.id))) {
-                    stored.push(defDog);
-                }
-            });
-            localStorage.setItem('love4paws_dogs', JSON.stringify(stored));
-            return stored;
-        }
+        const firebaseConfig = {
+            apiKey: "AIzaSyADzC9SPI-OXZAjCVYLXrHf4Ljo8m0lfbE",
+            authDomain: "love4paws-5c323.firebaseapp.com",
+            projectId: "love4paws-5c323",
+            storageBucket: "love4paws-5c323.firebasestorage.app",
+            messagingSenderId: "43901237248",
+            appId: "1:43901237248:web:04403ccaba5d1d388bc0e5",
+            measurementId: "G-4KG6H4Z581"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let adminDogsCache = [];
 
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('love4paws_admin_auth') === 'true') {
@@ -167,10 +155,9 @@
             lucide.createIcons();
         });
 
-        function handleAdminLogin(e) {
+        window.handleAdminLogin = function(e) {
             e.preventDefault();
             const pass = document.getElementById('admin-password').value;
-            
             if (pass && pass.trim().length > 0) {
                 sessionStorage.setItem('love4paws_admin_auth', 'true');
                 document.getElementById('admin-login-view').classList.add('hidden');
@@ -179,16 +166,16 @@
             } else {
                 alert('Please enter a valid passcode.');
             }
-        }
+        };
 
-        function handleLogout() {
+        window.handleLogout = function() {
             sessionStorage.removeItem('love4paws_admin_auth');
             document.getElementById('admin-dashboard-view').classList.add('hidden');
             document.getElementById('admin-login-view').classList.remove('hidden');
             document.getElementById('admin-password').value = '';
-        }
+        };
 
-        function switchTab(tab) {
+        window.switchTab = function(tab) {
             const appsTab = document.getElementById('tab-content-apps');
             const dogsTab = document.getElementById('tab-content-dogs');
             const btnApps = document.getElementById('btn-tab-apps');
@@ -206,7 +193,7 @@
                 btnApps.className = "px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 hover:bg-slate-200 transition-all";
                 loadAdminDogs();
             }
-        }
+        };
 
         function loadAdminData() {
             const apps = JSON.parse(localStorage.getItem('love4paws_apps')) || [];
@@ -215,53 +202,50 @@
 
             if (apps.length === 0) {
                 container.innerHTML = `<p class="text-xs text-slate-500 italic p-4 bg-white rounded-2xl border border-slate-200">No adoption applications submitted yet.</p>`;
-                return;
+            } else {
+                apps.forEach(app => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2 text-sm";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900">${app.name} <span class="text-xs font-normal text-amber-700">(Dog: ${app.dogName})</span></span>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${app.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : app.status === 'Declined' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}">${app.status}</span>
+                        </div>
+                        <div class="text-xs text-slate-600 grid sm:grid-cols-2 gap-1">
+                            <div><b>Email:</b> ${app.email}</div>
+                            <div><b>Phone:</b> ${app.phone}</div>
+                            <div><b>Housing:</b> ${app.housing} (${app.yard})</div>
+                            <div><b>Submitted:</b> ${app.date}</div>
+                        </div>
+                        <p class="text-xs bg-slate-50 p-2.5 rounded-xl text-slate-700"><b>Experience:</b> ${app.experience}</p>
+                    `;
+                    container.appendChild(card);
+                });
             }
-
-            apps.forEach(app => {
-                const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2 text-sm";
-                card.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-slate-900">${app.name} <span class="text-xs font-normal text-amber-700">(Dog: ${app.dogName})</span></span>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${app.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : app.status === 'Declined' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}">${app.status}</span>
-                    </div>
-                    <div class="text-xs text-slate-600 grid sm:grid-cols-2 gap-1">
-                        <div><b>Email:</b> ${app.email}</div>
-                        <div><b>Phone:</b> ${app.phone}</div>
-                        <div><b>Housing:</b> ${app.housing} (${app.yard})</div>
-                        <div><b>Submitted:</b> ${app.date}</div>
-                    </div>
-                    <p class="text-xs bg-slate-50 p-2.5 rounded-xl text-slate-700"><b>Experience:</b> ${app.experience}</p>
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="updateAppStatus(${app.id}, 'Approved')" class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold">Approve</button>
-                        <button onclick="updateAppStatus(${app.id}, 'Declined')" class="px-3 py-1 bg-rose-600 text-white rounded-lg text-xs font-bold">Decline</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+            loadAdminDogs();
             lucide.createIcons();
         }
 
-        function updateAppStatus(id, newStatus) {
-            let apps = JSON.parse(localStorage.getItem('love4paws_apps')) || [];
-            apps = apps.map(a => {
-                if (a.id === id) a.status = newStatus;
-                return a;
-            });
-            localStorage.setItem('love4paws_apps', JSON.stringify(apps));
-            loadAdminData();
-        }
-
-        function loadAdminDogs() {
-            let dogs = getAdminDogs();
-            let featuredId = localStorage.getItem('love4paws_featured_id');
+        async function loadAdminDogs() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "dogs"));
+                adminDogsCache = [];
+                querySnapshot.forEach((docSnap) => {
+                    adminDogsCache.push({ id: docSnap.id, ...docSnap.data() });
+                });
+            } catch (err) {
+                console.error("Error loading cloud dogs:", err);
+            }
 
             const container = document.getElementById('admin-dogs-container');
             container.innerHTML = '';
 
-            dogs.forEach(dog => {
-                const isFeatured = String(dog.id) === String(featuredId) || (!featuredId && dog.id === "dog-1");
+            if (adminDogsCache.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 italic p-4">No dogs found in cloud database.</p>`;
+                return;
+            }
+
+            adminDogsCache.forEach(dog => {
                 const item = document.createElement('div');
                 item.className = "flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm";
                 item.innerHTML = `
@@ -269,113 +253,87 @@
                         <img src="${dog.image}" class="w-10 h-10 rounded-lg object-cover">
                         <div>
                             <span class="font-bold text-slate-900">${dog.name}</span>
-                            <span class="block text-xs text-slate-500">${dog.breed} • ${dog.ageText || dog.ageCategory || dog.age || ''} ${isFeatured ? '• <strong class="text-amber-600">Featured Hero Dog</strong>' : ''}</span>
+                            <span class="block text-xs text-slate-500">${dog.breed} • ${dog.age || ''}</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="setFeaturedDog('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold ${isFeatured ? 'bg-amber-500 text-white' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'}">
-                            ${isFeatured ? 'Featured ⭐' : 'Set as Featured'}
-                        </button>
                         <button onclick="editDogRecord('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300">Edit</button>
                         <button onclick="deleteDogRecord('${dog.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-100 text-rose-800 hover:bg-rose-200">Delete</button>
                     </div>
                 `;
                 container.appendChild(item);
             });
+            lucide.createIcons();
         }
 
-        function setFeaturedDog(id) {
-            localStorage.setItem('love4paws_featured_id', id);
-            alert("Featured dog updated successfully! Check the public site hero section.");
-            loadAdminDogs();
-        }
-
-        function editDogRecord(id) {
-            const dogs = getAdminDogs();
-            const dog = dogs.find(d => String(d.id) === String(id));
+        window.editDogRecord = function(id) {
+            const dog = adminDogsCache.find(d => String(d.id) === String(id));
             if (!dog) return;
 
             document.getElementById('edit-dog-id').value = dog.id;
             document.getElementById('dog-name').value = dog.name || '';
             document.getElementById('dog-breed').value = dog.breed || '';
-            document.getElementById('dog-age').value = dog.ageText || dog.ageCategory || dog.age || '';
+            document.getElementById('dog-age').value = dog.age || '';
             document.getElementById('dog-gender').value = dog.gender || 'Male';
             document.getElementById('dog-image-url').value = dog.image || '';
             document.getElementById('dog-bio').value = dog.bio || '';
 
             document.getElementById('form-title').innerText = `Edit Dog: ${dog.name}`;
-            document.getElementById('form-submit-btn').innerText = 'Save Changes';
+            document.getElementById('form-submit-btn').innerText = 'Save Cloud Changes';
             document.getElementById('cancel-edit-btn').classList.remove('hidden');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        };
 
-        function resetDogForm() {
+        window.resetDogForm = function() {
             document.getElementById('edit-dog-id').value = '';
             document.querySelector('form').reset();
             document.getElementById('form-title').innerText = 'Add New Adoptable Dog (ImgBB Link)';
-            document.getElementById('form-submit-btn').innerText = 'Add Dog to Catalog';
+            document.getElementById('form-submit-btn').innerText = 'Add Dog to Cloud Catalog';
             document.getElementById('cancel-edit-btn').classList.add('hidden');
-        }
+        };
 
-        function deleteDogRecord(id) {
-            if (confirm("Are you sure you want to delete this dog listing?")) {
-                let dogs = getAdminDogs();
-                dogs = dogs.filter(d => String(d.id) !== String(id));
-                localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
-                loadAdminDogs();
+        window.deleteDogRecord = async function(id) {
+            if (confirm("Are you sure you want to delete this dog listing from the cloud?")) {
+                try {
+                    await deleteDoc(doc(db, "dogs", id));
+                    alert("Dog deleted from cloud database!");
+                    loadAdminDogs();
+                } catch (err) {
+                    console.error("Error deleting dog:", err);
+                    alert("Failed to delete dog.");
+                }
             }
-        }
+        };
 
-        function handleSaveDogRecord(e) {
+        window.handleSaveDogRecord = async function(e) {
             e.preventDefault();
             const editId = document.getElementById('edit-dog-id').value;
             const name = document.getElementById('dog-name').value;
             const breed = document.getElementById('dog-breed').value;
-            const ageInput = document.getElementById('dog-age').value;
+            const age = document.getElementById('dog-age').value;
             const gender = document.getElementById('dog-gender').value;
             const bio = document.getElementById('dog-bio').value;
-            const imageUrl = document.getElementById('dog-image-url').value.trim();
+            const image = document.getElementById('dog-image-url').value.trim();
 
-            let dogs = getAdminDogs();
-
-            if (editId) {
-                dogs = dogs.map(d => {
-                    if (String(d.id) === String(editId)) {
-                        d.name = name;
-                        d.breed = breed;
-                        d.age = ageInput;
-                        d.ageCategory = ageInput;
-                        d.ageText = ageInput;
-                        d.gender = gender;
-                        d.bio = bio;
-                        if (imageUrl) d.image = imageUrl;
-                    }
-                    return d;
-                });
-                alert('Dog listing updated successfully!');
-            } else {
-                let newId = "dog-" + Date.now();
-                dogs.unshift({
-                    id: newId,
-                    name,
-                    breed,
-                    age: ageInput,
-                    ageCategory: ageInput,
-                    ageText: ageInput,
-                    gender,
-                    image: imageUrl,
-                    bio,
-                    traits: ["Friendly", "Loving"],
-                    status: 'available'
-                });
-                alert('New dog added successfully!');
+            try {
+                if (editId) {
+                    const docRef = doc(db, "dogs", editId);
+                    await updateDoc(docRef, { name, breed, age, gender, bio, image });
+                    alert('Dog listing updated in cloud successfully!');
+                } else {
+                    await addDoc(collection(db, "dogs"), {
+                        name, breed, age, gender, bio, image, status: 'available', createdAt: Date.now()
+                    });
+                    alert('New dog added to cloud catalog successfully!');
+                }
+                resetDogForm();
+                loadAdminDogs();
+            } catch (err) {
+                console.error("Error saving dog to cloud:", err);
+                alert("Failed to save. Make sure your Firestore database is created in Firebase Console.");
             }
-
-            localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
-            resetDogForm();
-            loadAdminDogs();
-        }
+        };
     </script>
 </body>
 </html>
