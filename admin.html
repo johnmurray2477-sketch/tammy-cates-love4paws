@@ -128,6 +128,36 @@
 
     <!-- Admin JavaScript Logic -->
     <script>
+        const defaultDogs = [
+            {
+                id: "dog-1", name: "Buster", breed: "Golden Retriever Mix", age: "2 Years Old", gender: "Male", status: "available",
+                image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80",
+                traits: ["Friendly", "Good with Kids", "High Energy", "House-Trained"],
+                bio: "Buster is a joyful Golden mix who loves long walks, playing fetch, and cuddles. He has thrived in foster care and is ready for his home."
+            },
+            {
+                id: "dog-2", name: "Luna", breed: "Beagle Mix", age: "8 Months Old", gender: "Female", status: "available",
+                image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80",
+                traits: ["Curious", "Playful", "Leash Trained", "Dog Friendly"],
+                bio: "Luna has adorable floppy ears and an inquisitive nose! She gets along great with other dogs and loves learning new tricks."
+            }
+        ];
+
+        function getAdminDogs() {
+            let stored = JSON.parse(localStorage.getItem('love4paws_dogs'));
+            if (!stored || stored.length === 0) {
+                localStorage.setItem('love4paws_dogs', JSON.stringify(defaultDogs));
+                return defaultDogs;
+            }
+            defaultDogs.forEach(defDog => {
+                if (!stored.some(d => String(d.id) === String(defDog.id))) {
+                    stored.push(defDog);
+                }
+            });
+            localStorage.setItem('love4paws_dogs', JSON.stringify(stored));
+            return stored;
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('love4paws_admin_auth') === 'true') {
                 document.getElementById('admin-login-view').classList.add('hidden');
@@ -224,7 +254,7 @@
         }
 
         function loadAdminDogs() {
-            let dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
+            let dogs = getAdminDogs();
             let featuredId = localStorage.getItem('love4paws_featured_id');
 
             const container = document.getElementById('admin-dogs-container');
@@ -261,7 +291,7 @@
         }
 
         function editDogRecord(id) {
-            const dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
+            const dogs = getAdminDogs();
             const dog = dogs.find(d => String(d.id) === String(id));
             if (!dog) return;
 
@@ -290,7 +320,7 @@
 
         function deleteDogRecord(id) {
             if (confirm("Are you sure you want to delete this dog listing?")) {
-                let dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
+                let dogs = getAdminDogs();
                 dogs = dogs.filter(d => String(d.id) !== String(id));
                 localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
                 loadAdminDogs();
@@ -307,7 +337,7 @@
             const bio = document.getElementById('dog-bio').value;
             const imageUrl = document.getElementById('dog-image-url').value.trim();
 
-            let dogs = JSON.parse(localStorage.getItem('love4paws_dogs')) || [];
+            let dogs = getAdminDogs();
 
             if (editId) {
                 dogs = dogs.map(d => {
