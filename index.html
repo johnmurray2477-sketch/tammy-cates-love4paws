@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <!-- Featured Dog Hero Card (Dynamic with visibility hidden to prevent flashing) -->
+                <!-- Featured Dog Hero Card -->
                 <div class="lg:col-span-5 relative">
                     <div class="relative mx-auto max-w-md lg:max-w-none">
                         <div class="absolute -inset-4 bg-gradient-to-tr from-brand-400 via-amber-300 to-amber-200 rounded-3xl blur-2xl opacity-40 -z-10 animate-pulse"></div>
@@ -199,7 +199,7 @@
         </div>
     </section>
 
-    <!-- Rescue & Transformation Stories Slideshow Section -->
+    <!-- Rescue & Transformation Stories Slideshow Section (Automatic Auto-Advance) -->
     <section id="transformations" class="py-20 bg-white border-t border-brand-100">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
@@ -212,7 +212,7 @@
             <!-- Slideshow Card Container -->
             <div id="slideshow-container" class="relative bg-brand-50/50 rounded-3xl border border-brand-100 p-6 sm:p-10 shadow-xl overflow-hidden">
                 <!-- Dynamically populated via JavaScript -->
-                <div id="story-slide-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div id="story-slide-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center transition-all duration-500">
                     <!-- Loaded dynamically -->
                 </div>
 
@@ -340,7 +340,7 @@
         </div>
     </section>
 
-    <!-- Wishlist & eGift Cards Section -->
+    <!-- Wishlist & eGift Cards Section (Email text removed as requested) -->
     <section id="donate" class="py-20 bg-white border-t border-brand-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
@@ -397,7 +397,6 @@
                 <div class="lg:col-span-6 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
                     <div class="text-center space-y-1">
                         <h3 class="font-heading font-bold text-xl text-slate-900">Send a Digital eGift Card</h3>
-                        <p class="text-xs text-slate-500">Send directly to: <span class="font-mono font-bold text-brand-700 select-all">tammycateslovepaws@gmail.com</span></p>
                     </div>
 
                     <!-- Gift Card Platform Selector Buttons -->
@@ -505,6 +504,7 @@
         let cachedDogs = [];
         let cachedStories = [];
         let currentStoryIndex = 0;
+        let storyTimer = null;
 
         async function fetchLiveData() {
             try {
@@ -531,6 +531,7 @@
             loadFeaturedDogInHero();
             window.renderPublicDogs(cachedDogs);
             renderStorySlide();
+            startStoryAutoTimer();
         }
 
         window.getStoredDogs = function() {
@@ -676,16 +677,29 @@
             lucide.createIcons();
         }
 
+        // Automatic Slide Advancement Timer
+        function startStoryAutoTimer() {
+            if (storyTimer) clearInterval(storyTimer);
+            storyTimer = setInterval(() => {
+                if (cachedStories.length > 1) {
+                    currentStoryIndex = (currentStoryIndex + 1) % cachedStories.length;
+                    renderStorySlide();
+                }
+            }, 6000); // Advances automatically every 6 seconds
+        }
+
         window.nextStory = function() {
             if (cachedStories.length === 0) return;
             currentStoryIndex = (currentStoryIndex + 1) % cachedStories.length;
             renderStorySlide();
+            startStoryAutoTimer(); // Reset timer when clicked manually
         };
 
         window.prevStory = function() {
             if (cachedStories.length === 0) return;
             currentStoryIndex = (currentStoryIndex - 1 + cachedStories.length) % cachedStories.length;
             renderStorySlide();
+            startStoryAutoTimer(); // Reset timer when clicked manually
         };
 
         window.applyFilters = function() {
