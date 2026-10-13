@@ -430,18 +430,19 @@
 
         function getStoredDogs() {
             let dogs = JSON.parse(localStorage.getItem('love4paws_dogs'));
+            
+            // Force-load defaults if storage is completely empty or corrupted
             if (!dogs || dogs.length === 0) {
                 localStorage.setItem('love4paws_dogs', JSON.stringify(defaultDogs));
-                dogs = defaultDogs;
-            } else {
-                // Automatically merge any default dogs missing from storage
-                defaultDogs.forEach(defDog => {
-                    if (!dogs.some(d => String(d.id) === String(defDog.id))) {
-                        dogs.push(defDog);
-                    }
-                });
-                localStorage.setItem('love4paws_dogs', JSON.stringify(dogs));
+                return defaultDogs;
             }
+            
+            // Ensure any new default dogs are merged in
+            defaultDogs.forEach(defDog => {
+                if (!dogs.some(d => String(d.id) === String(defDog.id))) {
+                    dogs.push(defDog);
+                }
+            });
             return dogs;
         }
 
