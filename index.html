@@ -236,18 +236,28 @@
         </div>
     </section>
 
-    <!-- Dog Detail Modal -->
-    <div id="dog-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <!-- Dog Detail Modal (Mobile Touch Fixed) -->
+    <div id="dog-modal" 
+         onclick="if(event.target === this) closeDogModal()" 
+         ontouchstart="if(event.target === this) closeDogModal()"
+         class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in duration-200">
-            <button onclick="closeDogModal()" aria-label="Close details modal" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 hover:bg-white text-slate-700 shadow-md transition-all">
-                <i data-lucide="x" class="w-5 h-5"></i>
+            <!-- Mobile Touch-Friendly Close Button -->
+            <button onclick="closeDogModal()" 
+                    ontouchstart="closeDogModal()" 
+                    aria-label="Close details modal" 
+                    class="absolute top-3 right-3 z-30 p-3 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white shadow-lg backdrop-blur-md active:scale-90 transition-all touch-none">
+                <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <div id="dog-modal-content"></div>
         </div>
     </div>
 
     <!-- Email Contact Modal Pop-up -->
-    <div id="email-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div id="email-modal" 
+         onclick="if(event.target === this) closeEmailModal()"
+         ontouchstart="if(event.target === this) closeEmailModal()"
+         class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200">
             <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto">
                 <i data-lucide="mail" class="w-6 h-6"></i>
@@ -264,7 +274,7 @@
                 <button onclick="copyEmailToClipboard()" class="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-2">
                     <i data-lucide="copy" class="w-4 h-4"></i> Copy Email
                 </button>
-                <button onclick="closeEmailModal()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">
+                <button onclick="closeEmailModal()" ontouchstart="closeEmailModal()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">
                     Close
                 </button>
             </div>
@@ -684,7 +694,7 @@
                     currentStoryIndex = (currentStoryIndex + 1) % cachedStories.length;
                     renderStorySlide();
                 }
-            }, 6000); // Advances automatically every 6 seconds
+            }, 6000);
         }
 
         window.nextStory = function() {
@@ -749,30 +759,38 @@
                             </div>
                         </div>
                         <div class="pt-4 border-t border-slate-100">
-                            <button onclick="closeDogModal(); openEmailModal('${dog.name}');" class="w-full py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 transition-all text-sm flex items-center justify-center gap-2">
+                            <button onclick="closeDogModal(); openEmailModal('${dog.name}');" ontouchstart="closeDogModal(); openEmailModal('${dog.name}');" class="w-full py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl shadow-lg shadow-brand-500/25 transition-all text-sm flex items-center justify-center gap-2">
                                 <i data-lucide="mail" class="w-4 h-4"></i> Adopt ${dog.name} (Contact Email)
                             </button>
                         </div>
                     </div>
                 </div>
             `;
-            document.getElementById('dog-modal').classList.remove('hidden');
-            document.getElementById('dog-modal').classList.add('flex');
+            const modal = document.getElementById('dog-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Prevent background scroll on mobile
             lucide.createIcons();
         };
 
         window.closeDogModal = function() {
-            document.getElementById('dog-modal').classList.add('hidden');
-            document.getElementById('dog-modal').classList.remove('flex');
+            const modal = document.getElementById('dog-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = ''; // Restore background scroll
         };
 
         window.openEmailModal = function(dogName) {
             document.getElementById('modal-dog-name').innerText = dogName;
-            document.getElementById('email-modal').classList.remove('hidden');
+            const modal = document.getElementById('email-modal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         };
 
         window.closeEmailModal = function() {
-            document.getElementById('email-modal').classList.add('hidden');
+            const modal = document.getElementById('email-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
         };
 
         window.copyEmailToClipboard = function() {
