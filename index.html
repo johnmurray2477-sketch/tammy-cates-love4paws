@@ -56,7 +56,7 @@
     <div class="bg-gradient-to-r from-brand-700 via-brand-600 to-amber-700 text-white text-xs font-semibold py-2 px-4 text-center tracking-wide flex items-center justify-center gap-2">
         <i data-lucide="sparkles" class="w-4 h-4 text-amber-200 shrink-0"></i>
         <span>Registered 501(c)(3) Non-Profit • Every Adoption Saves a Life</span>
-        <a href="#donate" class="underline hover:text-amber-200 ml-2 font-bold transition-colors">Donate Today</a>
+        <a href="#donate" class="underline hover:text-amber-200 ml-2 font-bold transition-colors">Wishlist & eGift Cards</a>
     </div>
 
     <!-- Navigation Header -->
@@ -79,7 +79,7 @@
                 <a href="#dogs" class="hover:text-brand-600 transition-colors py-1">Meet Our Dogs</a>
                 <a href="#about" class="hover:text-brand-600 transition-colors py-1">About Tammy & Mission</a>
                 <a href="#process" class="hover:text-brand-600 transition-colors py-1">How to Adopt</a>
-                <a href="#donate" class="hover:text-brand-600 transition-colors py-1">Donate</a>
+                <a href="#donate" class="hover:text-brand-600 transition-colors py-1">Wishlist & eGift Cards</a>
                 <a href="#contact" class="hover:text-brand-600 transition-colors py-1">Contact</a>
             </nav>
 
@@ -303,71 +303,117 @@
         </div>
     </section>
 
-    <!-- Donation Section -->
+    <!-- Wishlist & eGift Cards Section (Replaces Donation Calculator) -->
     <section id="donate" class="py-20 bg-white border-t border-brand-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
             <div class="text-center max-w-2xl mx-auto space-y-3">
                 <span class="text-xs font-bold tracking-widest text-brand-700 uppercase bg-brand-100 px-3.5 py-1 rounded-full">100% Non-Profit Organization</span>
-                <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">Support Tammy Cates Love4paws</h2>
-                <p class="text-slate-600 text-sm sm:text-base">Every single dollar goes directly towards veterinary treatment, spay/neuter operations, and quality nutrition for dogs in our care.</p>
+                <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">Support via Wishlist & eGift Cards</h2>
+                <p class="text-slate-600 text-sm sm:text-base">Support Tammy Cates Love4paws by purchasing urgently needed supplies or sending digital eGift cards directly to our rescue email.</p>
             </div>
 
-            <div class="max-w-3xl mx-auto bg-brand-50/30 p-6 sm:p-10 rounded-3xl shadow-xl border border-brand-100 space-y-8">
-                <div class="flex justify-center">
-                    <div class="bg-slate-100 p-1.5 rounded-2xl flex items-center gap-1">
-                        <button id="freq-one-time" onclick="setFrequency('one-time')" class="px-6 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-900 shadow-sm">One-Time Giving</button>
-                        <button id="freq-monthly" onclick="setFrequency('monthly')" class="px-6 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900">Monthly Sponsor ❤️</button>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left Column: Most Needed Items List -->
+                <div class="lg:col-span-6 bg-brand-50/50 p-6 sm:p-8 rounded-3xl border border-brand-100 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center font-bold">
+                            <i data-lucide="package-open" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-heading font-bold text-lg text-slate-900">Urgently Needed Supplies</h3>
+                            <p class="text-xs text-slate-500">What we purchase using donated gift cards</p>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-1">
+                            <span class="text-lg">🥩</span>
+                            <h4 class="font-heading font-bold text-sm text-slate-900">Food & Treats</h4>
+                            <p class="text-xs text-slate-500">High-protein dry food and training treats.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-1">
+                            <span class="text-lg">🧸</span>
+                            <h4 class="font-heading font-bold text-sm text-slate-900">Toys & Comfort</h4>
+                            <p class="text-xs text-slate-500">Chew toys, durable blankets & puppy pads.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-1">
+                            <span class="text-lg">🧼</span>
+                            <h4 class="font-heading font-bold text-sm text-slate-900">Health & Care</h4>
+                            <p class="text-xs text-slate-500">Sensitive skin shampoo & cleaning supplies.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-1">
+                            <span class="text-lg">💊</span>
+                            <h4 class="font-heading font-bold text-sm text-slate-900">Medical & Leashes</h4>
+                            <p class="text-xs text-slate-500">Collars, durable leashes & stainless bowls.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-amber-100/60 border border-amber-200 rounded-2xl text-xs text-amber-900 space-y-1">
+                        <p class="font-bold">💡 How it works:</p>
+                        <p>When you send an eGift card, it arrives in our inbox with the barcode and claim code. We use it immediately for these exact rescue needs!</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <button onclick="selectDonationAmount(25)" id="btn-amt-25" class="amt-btn py-4 px-2 rounded-2xl border-2 border-brand-500 bg-brand-50/50 font-heading font-extrabold text-2xl text-brand-800 transition-all text-center">$25</button>
-                    <button onclick="selectDonationAmount(50)" id="btn-amt-50" class="amt-btn py-4 px-2 rounded-2xl border-2 border-slate-200 bg-white hover:border-brand-300 font-heading font-extrabold text-2xl text-slate-800 transition-all text-center">$50</button>
-                    <button onclick="selectDonationAmount(100)" id="btn-amt-100" class="amt-btn py-4 px-2 rounded-2xl border-2 border-slate-200 bg-white hover:border-brand-300 font-heading font-extrabold text-2xl text-slate-800 transition-all text-center">$100</button>
-                    <button onclick="selectDonationAmount(250)" id="btn-amt-250" class="amt-btn py-4 px-2 rounded-2xl border-2 border-slate-200 bg-white hover:border-brand-300 font-heading font-extrabold text-2xl text-slate-800 transition-all text-center">$250</button>
+                <!-- Right Column: eGift Card Options (Target, Amazon, Visa) -->
+                <div class="lg:col-span-6 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
+                    <div class="text-center space-y-1">
+                        <h3 class="font-heading font-bold text-xl text-slate-900">Send a Digital eGift Card</h3>
+                        <p class="text-xs text-slate-500">Send directly to: <span class="font-mono font-bold text-brand-700 select-all">tammycateslovepaws@gmail.com</span></p>
+                    </div>
+
+                    <!-- Gift Card Platform Selector Buttons -->
+                    <div class="space-y-3">
+                        
+                        <!-- Target Card Option -->
+                        <a href="https://www.target.com/c/target-gift-cards/-/N-5xsxu" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-brand-50/30 transition-all group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold text-sm">🎯</div>
+                                <div>
+                                    <h4 class="font-heading font-bold text-sm text-slate-900 group-hover:text-brand-700">Target eGift Card</h4>
+                                    <p class="text-xs text-slate-500">Great for food, blankets & cleaning supplies</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-brand-600 flex items-center gap-1">Send <i data-lucide="external-link" class="w-3.5 h-3.5"></i></span>
+                        </a>
+
+                        <!-- Amazon Card Option -->
+                        <a href="https://www.amazon.com/dp/B004LLIKVU" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-brand-50/30 transition-all group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm">📦</div>
+                                <div>
+                                    <h4 class="font-heading font-bold text-sm text-slate-900 group-hover:text-brand-700">Amazon eGift Card</h4>
+                                    <p class="text-xs text-slate-500">Great for online rescue gear & bulk treats</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-brand-600 flex items-center gap-1">Send <i data-lucide="external-link" class="w-3.5 h-3.5"></i></span>
+                        </a>
+
+                        <!-- Visa Virtual Card Option -->
+                        <a href="https://www.giftcards.com/visa-gift-cards" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-brand-50/30 transition-all group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm">💳</div>
+                                <div>
+                                    <h4 class="font-heading font-bold text-sm text-slate-900 group-hover:text-brand-700">Visa Virtual Gift Card</h4>
+                                    <p class="text-xs text-slate-500">Flexible use for vet bills or specialized needs</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-brand-600 flex items-center gap-1">Send <i data-lucide="external-link" class="w-3.5 h-3.5"></i></span>
+                        </a>
+
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
+                        <p class="text-xs text-slate-600"><b>Important tip when purchasing:</b> Set recipient email to <code class="text-brand-700 font-mono select-all">tammycateslovepaws@gmail.com</code> so Tammy receives the digital card instantly!</p>
+                    </div>
+
                 </div>
 
-                <div class="p-5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-start gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0">
-                        <i data-lucide="sparkles" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h4 id="impact-title" class="font-heading font-bold text-slate-900 text-sm">Your Impact at $25:</h4>
-                        <p id="impact-description" class="text-xs text-slate-600 mt-0.5">Provides full vaccination series and microchipping for 1 puppy.</p>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Or Enter Custom Amount ($)</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-3 font-bold text-slate-400">$</span>
-                        <input type="number" id="custom-donation-input" placeholder="Enter custom amount..." min="5" class="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
-                    </div>
-                </div>
-
-                <button onclick="processDonation()" class="w-full py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-2xl shadow-xl shadow-brand-500/25 transition-all text-base flex items-center justify-center gap-2">
-                    <i data-lucide="heart" class="w-5 h-5 fill-white"></i> Complete Donation
-                </button>
             </div>
+
         </div>
     </section>
-
-    <!-- Donation Modal -->
-    <div id="donation-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center space-y-6 shadow-2xl">
-            <div class="w-20 h-20 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto">
-                <i data-lucide="heart" class="w-10 h-10 fill-brand-500 text-brand-500"></i>
-            </div>
-            <div class="space-y-2">
-                <h3 class="text-2xl font-heading font-bold text-slate-900">Thank You for Your Love!</h3>
-                <p id="donation-text" class="text-sm text-slate-600">Your donation has been logged for Tammy Cates Love4paws.</p>
-            </div>
-            <button onclick="closeDonationModal()" class="w-full py-3 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl text-sm transition-all">
-                Close
-            </button>
-        </div>
-    </div>
 
     <!-- Footer -->
     <section id="contact" class="py-16 bg-slate-900 text-white border-t border-slate-800">
@@ -600,64 +646,6 @@
             navigator.clipboard.writeText(emailText).then(() => {
                 alert("Email copied to clipboard: " + emailText);
             });
-        };
-
-        // Donation functions
-        let currentDonationAmount = 25;
-        let donationFrequency = 'one-time';
-
-        window.selectDonationAmount = function(amt) {
-            currentDonationAmount = amt;
-            document.querySelectorAll('.amt-btn').forEach(btn => {
-                btn.className = "amt-btn py-4 px-2 rounded-2xl border-2 border-slate-200 bg-white hover:border-brand-300 font-heading font-extrabold text-2xl text-slate-800 transition-all text-center";
-            });
-            const activeBtn = document.getElementById(`btn-amt-${amt}`);
-            if (activeBtn) {
-                activeBtn.className = "amt-btn py-4 px-2 rounded-2xl border-2 border-brand-500 bg-brand-50/50 font-heading font-extrabold text-2xl text-brand-800 transition-all text-center";
-            }
-            document.getElementById('custom-donation-input').value = '';
-            updateImpactText(amt);
-        };
-
-        window.setFrequency = function(freq) {
-            donationFrequency = freq;
-            if (freq === 'one-time') {
-                document.getElementById('freq-one-time').className = "px-6 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-900 shadow-sm";
-                document.getElementById('freq-monthly').className = "px-6 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900";
-            } else {
-                document.getElementById('freq-monthly').className = "px-6 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-900 shadow-sm";
-                document.getElementById('freq-one-time').className = "px-6 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900";
-            }
-        };
-
-        function updateImpactText(amt) {
-            const title = document.getElementById('impact-title');
-            const desc = document.getElementById('impact-description');
-            if (title && desc) {
-                title.innerText = `Your Impact at $${amt}:`;
-                if (amt <= 25) {
-                    desc.innerText = "Provides full vaccination series and microchipping for 1 puppy.";
-                } else if (amt <= 50) {
-                    desc.innerText = "Covers essential rescue food and high-grade medical examination supplies.";
-                } else if (amt <= 100) {
-                    desc.innerText = "Funds life-saving spay/neuter surgical procedures for a rescue dog.";
-                } else {
-                    desc.innerText = "Fully sponsors complete emergency medical care and rehabilitation for a dog in urgent need.";
-                }
-            }
-        }
-
-        window.processDonation = function() {
-            const customInput = document.getElementById('custom-donation-input').value;
-            const finalAmt = customInput ? customInput : currentDonationAmount;
-            document.getElementById('donation-text').innerText = `Your $${finalAmt} (${donationFrequency}) contribution has been logged. Thank you for supporting Tammy Cates Love4paws!`;
-            document.getElementById('donation-modal').classList.remove('hidden');
-            document.getElementById('donation-modal').classList.add('flex');
-        };
-
-        window.closeDonationModal = function() {
-            document.getElementById('donation-modal').classList.add('hidden');
-            document.getElementById('donation-modal').classList.remove('flex');
         };
 
         window.addEventListener('DOMContentLoaded', () => {
