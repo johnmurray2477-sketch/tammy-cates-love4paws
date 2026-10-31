@@ -106,7 +106,6 @@
                         Welcome to Tammy Cates Love4paws, our mission is to care for vulnerable, loving dogs, provide complete medical rehabilitation, and place them with caring families.
                     </p>
 
-                    <!-- Hero Actions (Adopt Now button removed as requested) -->
                     <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                         <a href="#dogs" class="px-6 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-base shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5 flex items-center gap-2">
                             <i data-lucide="paw-print" class="w-5 h-5"></i> View Available Dogs
@@ -206,29 +205,19 @@
         </div>
     </section>
 
-    <!-- Rescue & Transformation Stories Slideshow Section -->
+    <!-- Rescue & Transformation Stories Slideshow Section (Controls Removed) -->
     <section id="transformations" class="py-20 bg-white border-t border-brand-100">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
             <div class="text-center max-w-2xl mx-auto space-y-3">
                 <span class="text-xs font-bold tracking-widest text-brand-700 uppercase bg-brand-100 px-3.5 py-1 rounded-full">Second Chances</span>
                 <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900">Rescue & Transformation Stories</h2>
-                <p class="text-slate-600 text-sm sm:text-base">Witness the incredible power of love, medical care, and dedication. Swipe through our before-and-after transformations.</p>
+                <p class="text-slate-600 text-sm sm:text-base">Witness the incredible power of love, medical care, and dedication. Stories automatically transition.</p>
             </div>
 
             <!-- Slideshow Card Container -->
             <div id="slideshow-container" class="relative bg-brand-50/50 rounded-3xl border border-brand-100 p-6 sm:p-10 shadow-xl overflow-hidden">
                 <div id="story-slide-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center transition-all duration-500"></div>
-
-                <div class="flex items-center justify-between mt-8 pt-6 border-t border-brand-200/60">
-                    <button onclick="prevStory()" class="px-4 py-2.5 rounded-xl bg-white hover:bg-brand-100 text-slate-700 font-bold text-xs shadow-sm transition-all flex items-center gap-2 border border-slate-200">
-                        <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous Story
-                    </button>
-                    <span id="story-counter" class="text-xs font-bold text-brand-800 uppercase tracking-widest">Story 1 of 1</span>
-                    <button onclick="nextStory()" class="px-4 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2">
-                        Next Story <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                    </button>
-                </div>
             </div>
 
             <div id="no-stories-state" class="hidden text-center py-12 bg-slate-50 rounded-3xl border border-slate-200">
@@ -351,7 +340,6 @@
                         <h3 class="font-heading font-bold text-lg text-slate-900">Fill Application</h3>
                         <p class="text-xs text-slate-500 leading-relaxed">Complete our quick online adoption application form so we can review your household fit.</p>
                     </div>
-                    <!-- Updated button text to "Fill Form" -->
                     <button onclick="openJotformModal()" class="mt-4 w-full py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center justify-center gap-1.5">
                         <i data-lucide="file-text" class="w-4 h-4"></i> Fill Form
                     </button>
@@ -494,7 +482,6 @@
                     </p>
                 </div>
 
-                <!-- Contact Info with Larger Email Address (Extra button removed) -->
                 <div class="space-y-3 md:text-right">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-brand-400">Location & Contact</h4>
                     <p class="text-xs text-slate-300 font-medium">📍 Sarasota, FL, United States</p>
@@ -658,10 +645,9 @@
             lucide.createIcons();
         };
 
-        // Slideshow Render Function
+        // Slideshow Render Function (Auto-advancing seamlessly without manual controls)
         function renderStorySlide() {
             const container = document.getElementById('story-slide-content');
-            const counter = document.getElementById('story-counter');
             const noStoriesState = document.getElementById('no-stories-state');
             const slideshowContainer = document.getElementById('slideshow-container');
 
@@ -678,7 +664,6 @@
             if (currentStoryIndex < 0) currentStoryIndex = cachedStories.length - 1;
 
             const story = cachedStories[currentStoryIndex];
-            counter.innerText = `Story ${currentStoryIndex + 1} of ${cachedStories.length}`;
 
             container.innerHTML = `
                 <div class="lg:col-span-6 space-y-6">
@@ -729,20 +714,6 @@
                 }
             }, 6000);
         }
-
-        window.nextStory = function() {
-            if (cachedStories.length === 0) return;
-            currentStoryIndex = (currentStoryIndex + 1) % cachedStories.length;
-            renderStorySlide();
-            startStoryAutoTimer();
-        };
-
-        window.prevStory = function() {
-            if (cachedStories.length === 0) return;
-            currentStoryIndex = (currentStoryIndex - 1 + cachedStories.length) % cachedStories.length;
-            renderStorySlide();
-            startStoryAutoTimer();
-        };
 
         window.applyFilters = function() {
             const ageSearch = document.getElementById('filter-age').value.toLowerCase();
